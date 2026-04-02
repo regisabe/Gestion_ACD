@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="app-title">GestionACD — Foncier Urbain CI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cg:#0A5C35;--cgl:#0F7A47;--cgp:#E6F2EC;
+  --co:#E8820C;--cop:#FEF3E7;
+  --ck:#B45309;
+  --bg:#F4F3EF;--sur:#FFFFFF;--sur2:#F0EFE9;
+  --brd:rgba(0,0,0,.09);--brdm:rgba(0,0,0,.15);
+  --tx:#1A1A18;--tx2:#5A5A54;--tx3:#9A9A92;
+  --rsm:6px;--rmd:10px;--rlg:14px;--rxl:20px;
+  --shsm:0 1px 3px rgba(0,0,0,.08);--shmd:0 4px 12px rgba(0,0,0,.1);
+  --sw:248px;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);display:flex;font-size:14px;line-height:1.5}
+#sb{width:var(--sw);background:var(--cg);display:flex;flex-direction:column;flex-shrink:0;position:relative;overflow:hidden}
+#sb::before{content:'';position:absolute;top:-50px;right:-50px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
+.brand{padding:16px 16px 14px;border-bottom:1px solid rgba(255,255,255,.1)}
+.brow{display:flex;align-items:center;gap:9px;margin-bottom:5px}
+.bico{width:34px;height:34px;background:var(--co);border-radius:var(--rmd);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.bico img{width:100%;height:100%;object-fit:cover}
+.bico svg{width:17px;height:17px;fill:white}
+.brand h1{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;line-height:1.2}
+.brand p{font-size:10px;color:rgba(255,255,255,.45)}
+.cif{display:flex;gap:3px;margin-top:6px}.cif span{height:3px;border-radius:2px;flex:1}
+.cf1{background:var(--co)}.cf2{background:#fff}.cf3{background:#2E8B57}
+nav{flex:1;padding:10px 0;overflow-y:auto}
+nav::-webkit-scrollbar{width:3px}nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:2px}
+.ns{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3);padding:9px 16px 3px}
+.nitem{display:flex;align-items:center;gap:8px;padding:7px 16px;cursor:pointer;color:rgba(255,255,255,.65);font-size:12.5px;border-left:3px solid transparent;transition:all .15s;user-select:none}
+.nitem:hover{background:rgba(255,255,255,.08);color:#fff}
+.nitem.active{background:rgba(255,255,255,.12);color:#fff;border-left-color:var(--co);font-weight:500}
+.nitem svg{width:14px;height:14px;flex-shrink:0;opacity:.7}
+.nitem.active svg{opacity:1}
+.nbg{margin-left:auto;background:var(--co);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:9px;min-width:16px;text-align:center}
+.nbg-g{background:#16A34A}
+.ubar{padding:11px 14px;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:9px;flex-shrink:0}
+.ava{width:30px;height:30px;border-radius:50%;background:var(--co);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;flex-shrink:0}
+.uinfo p{color:#fff;font-size:11px;font-weight:500}.uinfo span{color:rgba(255,255,255,.4);font-size:10px}
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+#topbar{height:54px;background:var(--sur);border-bottom:1px solid var(--brd);padding:0 22px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;box-shadow:var(--shsm)}
+#tb-bc{font-size:10px;color:var(--tx3)}#tb-ti{font-family:'Syne',sans-serif;font-size:14px;font-weight:600}
+.tbr{display:flex;gap:7px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:var(--rmd);font-size:12.5px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;border:1px solid var(--brdm);background:var(--sur);color:var(--tx);transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--sur2)}.btn:active{transform:scale(.98)}
+.btn-p{background:var(--cg);color:#fff;border-color:var(--cg)}.btn-p:hover{background:var(--cgl)}
+.btn-o{background:var(--co);color:#fff;border-color:var(--co)}.btn-o:hover{opacity:.9}
+.btn-b{background:#1565C0;color:#fff;border-color:#1565C0}.btn-b:hover{background:#1976D2}
+.btn-k{background:#B45309;color:#fff;border-color:#B45309}.btn-k:hover{background:#92400E}
+.btn-sm{padding:4px 9px;font-size:11px;border-radius:var(--rsm)}
+.btn-ghost{border-color:transparent;background:transparent}.btn-ghost:hover{background:var(--sur2)}
+.btn-danger{color:#991B1B;border-color:transparent;background:transparent}.btn-danger:hover{background:#FEE2E2;border-color:#991B1B}
+#content{flex:1;overflow-y:auto;padding:22px}
+#content::-webkit-scrollbar{width:5px}#content::-webkit-scrollbar-thumb{background:var(--brdm);border-radius:3px}
+.page{display:none}.page.active{display:block;animation:fi .2s ease-out}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.sr{display:grid;gap:11px;margin-bottom:20px}
+.sr-5{grid-template-columns:repeat(5,1fr)}.sr-4{grid-template-columns:repeat(4,1fr)}.sr-3{grid-template-columns:repeat(3,1fr)}
+.sc{background:var(--sur);border:1px solid var(--brd);border-radius:var(--rlg);padding:14px 16px;box-shadow:var(--shsm);position:relative;overflow:hidden}
+.sc::after{content:'';position:absolute;top:0;left:0;width:4px;height:100%;border-radius:3px 0 0 3px}
+.sc.g::after{background:var(--cg)}.sc.o::after{background:var(--co)}.sc.b::after{background:#1565C0}.sc.gr::after{background:var(--tx3)}.sc.r::after{background:#991B1B}.sc.p::after{background:#7B1FA2}.sc.k::after{background:#B45309}.sc.t::after{background:#0891B2}
+.slbl{font-size:11px;color:var(--tx2);margin-bottom:4px;font-weight:500}
+.sval{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;line-height:1;margin-bottom:2px}
+.ssub{font-size:10px;color:var(--tx3)}
+.card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--rlg);box-shadow:var(--shsm);overflow:hidden;margin-bottom:14px}
+.ch{padding:12px 16px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ch h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:600}
+.chm{font-size:11px;color:var(--tx3)}.cb{padding:16px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{text-align:left;padding:8px 12px;font-size:10px;font-weight:700;color:var(--tx3);letter-spacing:.04em;text-transform:uppercase;background:var(--sur2);border-bottom:1px solid var(--brd);white-space:nowrap}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--brd);color:var(--tx);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:var(--cgp)}
+.tnum{font-family:'Syne',sans-serif;font-weight:600;font-size:12px;color:var(--cg)}
+.tsub{font-size:10px;color:var(--tx3);margin-top:1px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.ba{background:#E6F2EC;color:#0A5C35}.bw{background:#FEF3E7;color:#B45309}.bn{background:#FEE2E2;color:#991B1B}.be{background:#EFF6FF;color:#1D4ED8}.bv{background:#F3E8FF;color:#6B21A8}.bc{background:#E0F2FE;color:#0369A1}.bt{background:#CFFAFE;color:#0E7490}
+.fst{font-family:'Syne',sans-serif;font-size:11px;font-weight:600;color:var(--cg);padding:10px 0 6px;border-bottom:1px solid var(--brd);margin-bottom:12px;text-transform:uppercase;letter-spacing:.04em}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.fg4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.ff{grid-column:1/-1}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:11px;font-weight:500;color:var(--tx2)}
+.fg input,.fg select,.fg textarea{padding:7px 10px;border:1px solid var(--brdm);border-radius:var(--rmd);font-size:12.5px;font-family:'DM Sans',sans-serif;background:var(--sur);color:var(--tx);width:100%;transition:border-color .15s,box-shadow .15s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--cg);box-shadow:0 0 0 3px rgba(10,92,53,.1)}
+.fg textarea{resize:vertical;min-height:70px}
+.fg input.warn{border-color:var(--co);background:var(--cop)}
+.req{color:var(--co)}
+.sbar{display:flex;gap:7px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
+.sw{flex:1;min-width:160px;position:relative}
+.sw svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;fill:none;stroke:var(--tx3);stroke-width:2;stroke-linecap:round;pointer-events:none}
+.sw input{width:100%;padding:7px 10px 7px 28px;border:1px solid var(--brdm);border-radius:var(--rmd);font-size:12.5px;font-family:'DM Sans',sans-serif;background:var(--sur);color:var(--tx)}
+.sw input:focus{outline:none;border-color:var(--cg);box-shadow:0 0 0 3px rgba(10,92,53,.1)}
+.fsel{padding:7px 10px;border:1px solid var(--brdm);border-radius:var(--rmd);font-size:12.5px;font-family:'DM Sans',sans-serif;background:var(--sur);color:var(--tx);cursor:pointer}
+.chips{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.chip{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1px solid var(--brdm);background:var(--sur);color:var(--tx2);transition:all .15s;user-select:none}
+.chip:hover{border-color:var(--cg);color:var(--cg)}.chip.active{background:var(--cg);color:#fff;border-color:var(--cg)}
+.tl{list-style:none}
+.tli{display:flex;gap:10px;padding:4px 0}
+.tldc{display:flex;flex-direction:column;align-items:center;padding-top:4px;width:13px;flex-shrink:0}
+.tldot{width:7px;height:7px;border-radius:50%;background:var(--cg);flex-shrink:0;border:2px solid var(--cgp)}
+.tlln{width:1px;flex:1;background:var(--brd);margin-top:3px}
+.tli:last-child .tlln{display:none}
+.tlmsg{color:var(--tx);font-size:12px}.tlmt{font-size:10px;color:var(--tx3);margin-top:1px}
+.wfc{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border:1px solid var(--brd);border-radius:var(--rlg);background:var(--sur);margin-bottom:8px;box-shadow:var(--shsm);transition:border-color .15s;gap:10px}
+.wfc:hover{border-color:var(--cg)}
+.wfnum{font-family:'Syne',sans-serif;font-weight:600;font-size:13px;color:var(--cg)}
+.wfsub{font-size:11px;color:var(--tx3);margin-top:1px}
+.wfact{display:flex;gap:6px;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.rbi{margin-bottom:10px}
+.rbh{display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px;color:var(--tx2)}
+.rbh span:last-child{font-weight:600;color:var(--tx)}
+.rbt{height:6px;background:var(--sur2);border-radius:4px;overflow:hidden}
+.rbf{height:100%;border-radius:4px;transition:width .5s ease}
+/* UPLOAD */
+.upload-zone{border:2px dashed var(--brdm);border-radius:var(--rlg);padding:14px;text-align:center;cursor:pointer;transition:all .2s;background:var(--sur2);position:relative}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--cg);background:var(--cgp)}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-zone svg{width:24px;height:24px;stroke:var(--tx3);fill:none;stroke-width:1.5;margin-bottom:5px}
+.upload-zone p{font-size:11px;color:var(--tx2);font-weight:500}
+.upload-zone span{font-size:10px;color:var(--tx3)}
+.file-list{display:flex;flex-direction:column;gap:5px;margin-top:5px}
+.file-item{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--cgp);border:1px solid rgba(10,92,53,.15);border-radius:var(--rmd)}
+.fi-icon{width:26px;height:26px;background:var(--cg);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fi-icon svg{width:13px;height:13px;stroke:white;fill:none;stroke-width:2}
+.fi-name{flex:1;font-size:11px;font-weight:500;word-break:break-all}
+.fi-size{font-size:10px;color:var(--tx3);flex-shrink:0}
+.fi-del,.fi-view{background:none;border:none;cursor:pointer;padding:2px 5px;border-radius:4px;transition:all .15s;font-size:11px;font-weight:600;font-family:'DM Sans',sans-serif}
+.fi-view{color:var(--cg)}.fi-view:hover{background:rgba(10,92,53,.1)}
+.fi-del{color:var(--tx3)}.fi-del:hover{color:#991B1B;background:#FEE2E2}
+.piece-section{border:1px solid var(--brd);border-radius:var(--rlg);overflow:hidden;margin-bottom:8px}
+.piece-header{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:var(--sur2);cursor:pointer;user-select:none;gap:8px}
+.piece-header h4{font-size:12px;font-weight:600;flex:1}
+.ph-req{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:600}
+.ph-req.obl{background:var(--cop);color:#B45309}.ph-req.fac{background:var(--cgp);color:var(--cg)}
+.ph-status{font-size:10px;font-weight:700}.ph-status.done{color:var(--cg)}.ph-status.pend{color:var(--co)}
+.piece-body{padding:10px 13px;display:none}.piece-body.open{display:block}
+.piece-desc{font-size:11px;color:var(--tx2);margin-bottom:7px;padding:6px 10px;background:var(--cop);border-left:3px solid var(--co);border-radius:var(--rmd)}
+.prog-bar{height:6px;background:var(--sur2);border-radius:4px;overflow:hidden;margin-top:4px}
+.prog-fill{height:100%;border-radius:4px;background:var(--cg);transition:width .4s ease}
+/* CAISSE */
+.prest-card{border:1px solid var(--brd);border-radius:var(--rlg);padding:12px;margin-bottom:8px;background:var(--sur);box-shadow:var(--shsm);cursor:pointer;transition:all .15s}
+.prest-card:hover{border-color:var(--co)}.prest-card.selected{border-color:var(--co);background:var(--cop)}
+.prest-title{font-weight:600;font-size:12.5px;margin-bottom:2px}
+.prest-amt{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--co)}
+.prest-desc{font-size:10px;color:var(--tx3);margin-top:2px}
+.er-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;display:inline-flex;align-items:center;gap:3px}
+.er-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.er-badge.paye{background:#E6F2EC;color:#0A5C35}.er-badge.partiel{background:#FEF3E7;color:#B45309}.er-badge.impaye{background:#FEE2E2;color:#991B1B}.er-badge.retrait{background:#CFFAFE;color:#0E7490}
+/* RECU */
+.recu-sheet{background:#fff;border:1px solid #ccc;padding:18px 20px;page-break-after:always}
+.recu-sheet:last-child{page-break-after:auto}
+.recu-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;padding-bottom:10px;border-bottom:2px solid var(--cg)}
+.recu-org-logo{width:48px;height:48px;border-radius:var(--rmd);background:var(--co);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:#fff;overflow:hidden;flex-shrink:0}
+.recu-org-logo img{width:100%;height:100%;object-fit:cover}
+.recu-org-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--cg)}
+.recu-org-sub{font-size:10px;color:var(--tx3)}
+.recu-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--cg);text-align:right}
+.recu-num{font-size:11px;color:var(--tx3);text-align:right}
+.recu-row{display:flex;justify-content:space-between;padding:4px 0;font-size:11.5px;border-bottom:1px dashed #eee}
+.recu-row:last-child{border-bottom:none}
+.recu-row .lbl{color:#666}
+.recu-total-box{background:var(--cgp);border:1px solid rgba(10,92,53,.2);padding:10px;border-radius:var(--rmd);margin-top:10px;display:flex;justify-content:space-between;align-items:center}
+.recu-total-lbl{font-size:12px;font-weight:600}
+.recu-total-amt{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--cg)}
+.recu-sigs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;font-size:10px;color:#666}
+.recu-sig-box{border-top:1px solid #ccc;padding-top:6px}
+.recu-exemplaire{background:var(--cgp);color:var(--cg);font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:8px;text-transform:uppercase}
+.recu-watermark{color:rgba(10,92,53,.08);font-size:48px;font-weight:900;position:absolute;bottom:20px;right:20px;font-family:'Syne',sans-serif;pointer-events:none}
+/* CONFIG */
+.cfg-section{background:var(--sur);border:1px solid var(--brd);border-radius:var(--rlg);padding:20px;margin-bottom:16px;box-shadow:var(--shsm)}
+.cfg-section h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--brd)}
+.cfg-logo-preview{width:64px;height:64px;border-radius:var(--rlg);background:var(--co);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff;overflow:hidden;border:2px solid var(--brd)}
+.cfg-logo-preview img{width:100%;height:100%;object-fit:cover}
+/* MODAL */
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.mov.open{display:flex}
+.mbox{background:var(--sur);border-radius:var(--rxl);width:700px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.22);border:1px solid var(--brd)}
+.mbox.sm{width:460px}.mbox.xl{width:960px}.mbox.recu-w{width:720px;max-height:96vh}
+.mbox::-webkit-scrollbar{width:4px}
+.mbox::-webkit-scrollbar-thumb{background:var(--brdm);border-radius:2px}
+.mhead{padding:16px 20px;border-bottom:1px solid var(--brd);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--sur);z-index:1}
+.mhead h3{font-family:'Syne',sans-serif;font-size:14px;font-weight:600}
+.mcls{width:26px;height:26px;border-radius:50%;background:var(--sur2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--tx2);font-family:monospace;transition:all .15s}
+.mcls:hover{background:var(--brdm)}
+.mbody{padding:20px}.mfoot{padding:12px 20px;border-top:1px solid var(--brd);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:var(--sur)}
+.sopt{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--brd);border-radius:var(--rmd);margin-bottom:6px;cursor:pointer;transition:all .15s}
+.sopt:hover{border-color:var(--cg);background:var(--cgp)}.sopt.selected{border-color:var(--cg);background:var(--cgp)}
+.sodot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.solbl{font-size:12.5px;font-weight:500}.sodesc{font-size:10px;color:var(--tx3);margin-top:1px}
+.alert-doublon{background:#FFF3CD;border:1px solid var(--co);border-left:4px solid var(--co);border-radius:var(--rmd);padding:8px 12px;font-size:11px;color:#92400E;margin-top:5px;display:none}
+.alert-doublon.show{display:block}
+.cess-block{border:1px solid var(--brd);border-radius:var(--rlg);padding:12px;margin-bottom:10px;position:relative;background:var(--sur2)}
+.cess-block .cess-title{font-size:11px;font-weight:600;color:var(--tx2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+.info-box{background:var(--cop);border:1px solid rgba(232,130,12,.2);border-left:4px solid var(--co);border-radius:var(--rmd);padding:10px 14px;font-size:12px;color:var(--tx2);margin-bottom:14px}
+.info-box-g{background:var(--cgp);border:1px solid rgba(10,92,53,.2);border-left:4px solid var(--cg);border-radius:var(--rmd);padding:10px 14px;font-size:12px;color:var(--tx2);margin-bottom:14px}
+.dg{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:11px}
+.di .dlbl{font-size:9px;color:var(--tx3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;font-weight:600}
+.di .dval{font-size:12.5px;font-weight:500}
+.dsep{border:none;border-top:1px solid var(--brd);margin:11px 0}
+.tag{display:inline-flex;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;text-transform:uppercase}
+.tgl{background:var(--cgp);color:var(--cg)}
+.redtbl table{font-size:11.5px}
+.redtbl thead th{padding:7px 10px;font-size:9px}
+.redtbl tbody td{padding:6px 10px}
+.ramt{font-family:'Syne',sans-serif;font-weight:600;font-size:11px;color:var(--cg);white-space:nowrap}
+.ramt-s{font-family:'Syne',sans-serif;font-weight:600;font-size:11px;color:#1565C0;white-space:nowrap}
+.frais-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+.frais-table th{background:var(--cg);color:#fff;padding:8px 12px;font-size:11px;font-weight:600;text-align:left}
+.frais-table td{padding:8px 12px;border-bottom:1px solid var(--brd)}
+.frais-table tr:last-child td{border-bottom:none}
+.amount{font-family:'Syne',sans-serif;font-weight:700;color:var(--cg)}
+#toast{position:fixed;bottom:18px;right:18px;background:var(--cg);color:#fff;padding:10px 16px;border-radius:var(--rlg);font-size:12.5px;font-weight:500;box-shadow:var(--shmd);z-index:1000;transform:translateY(70px);opacity:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s}
+#toast.show{transform:translateY(0);opacity:1}#toast.err{background:#991B1B}#toast.warn{background:#B45309}
+.empty{text-align:center;padding:32px 20px;color:var(--tx3)}
+.empty svg{width:38px;height:38px;stroke:var(--brdm);fill:none;stroke-width:1.5;margin:0 auto 8px;display:block}
+.empty p{font-size:12px}
+#file-viewer{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:900;display:none;align-items:center;justify-content:center;flex-direction:column}
+#file-viewer.open{display:flex}
+#file-viewer img{max-width:90vw;max-height:80vh;border-radius:var(--rmd)}
+#file-viewer iframe{width:85vw;height:80vh;border-radius:var(--rmd);border:none;background:#fff}
+#fv-close{position:absolute;top:16px;right:20px;background:rgba(255,255,255,.15);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center}
+#fv-close:hover{background:rgba(255,255,255,.3)}
+#fv-name{color:rgba(255,255,255,.7);font-size:12px;margin-top:10px}
+@media print{
+  #sb,#topbar,#toast,#file-viewer,.btn,.nitem,.tbr,.chips,.sbar,#m-recu .mhead,#m-recu .mfoot{display:none!important}
+  .mov.open{position:static;background:none;backdrop-filter:none;display:block}
+  .mbox.recu-w{width:100%;max-height:none;box-shadow:none;border:none;border-radius:0}
+  .recu-sheet{border:none;padding:10mm;page-break-after:always}
+}
+</style>
+</head>
+<body>
+
+<div id="sb">
+  <div class="brand">
+    <div class="brow">
+      <div class="bico" id="sb-logo"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-4h6v4"/></svg></div>
+      <div><h1 id="sb-app-name">GestionACD</h1></div>
+    </div>
+    <p id="sb-app-sub">Foncier Urbain — Côte d'Ivoire</p>
+    <div class="cif"><span class="cf1"></span><span class="cf2"></span><span class="cf3"></span></div>
+  </div>
+  <nav>
+    <div class="ns">Vue générale</div>
+    <div class="nitem active" data-page="dashboard" onclick="go('dashboard',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Tableau de bord
+    </div>
+    <div class="ns">Dossiers Techniques</div>
+    <div class="nitem" data-page="dt-liste" onclick="go('dt-liste',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+      Registre DT <span class="nbg" id="nb-dt">0</span>
+    </div>
+    <div class="nitem" data-page="dt-new" onclick="go('dt-new',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nouveau dossier
+    </div>
+    <div class="ns">Registre ACD</div>
+    <div class="nitem" data-page="acd-liste" onclick="go('acd-liste',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/></svg>
+      Registre ACD <span class="nbg" id="nb-acd">0</span>
+    </div>
+    <div class="nitem" data-page="acd-new" onclick="go('acd-new',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nouvel ACD
+    </div>
+    <div class="ns">Caisse</div>
+    <div class="nitem" data-page="caisse" onclick="go('caisse',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Encaissements <span class="nbg nbg-g" id="nb-caisse">0</span>
+    </div>
+    <div class="nitem" data-page="caisse-new" onclick="go('caisse-new',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nouvel encaissement
+    </div>
+    <div class="ns">Analyse & Suivi</div>
+    <div class="nitem" data-page="workflow" onclick="go('workflow',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 012 2v7"/><line x1="6" y1="9" x2="6" y2="21"/></svg>
+      Suivi workflow <span class="nbg" id="nb-wf" style="background:var(--co)">0</span>
+    </div>
+    <div class="nitem" data-page="rapports" onclick="go('rapports',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+      Rapports & Stats
+    </div>
+    <div class="ns">Référentiel</div>
+    <div class="nitem" data-page="nomenclature" onclick="go('nomenclature',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Nomenclature pièces
+    </div>
+    <div class="nitem" data-page="redevances" onclick="go('redevances',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      Barème redevances
+    </div>
+    <div class="nitem" data-page="lotissements" onclick="go('lotissements',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+      Lotissements
+    </div>
+    <div class="ns">Paramètres</div>
+    <div class="nitem" data-page="config" onclick="go('config',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Configuration
+    </div>
+  </nav>
+  <div class="ubar">
+    <div class="ava" id="sb-ava">AG</div>
+    <div class="uinfo"><p id="sb-username">Agent Guichet</p><span id="sb-org">Ministère Construction</span></div>
+  </div>
+</div>
+
+<div id="main">
+  <div id="topbar">
+    <div><div id="tb-bc">GestionACD</div><div id="tb-ti">Tableau de bord</div></div>
+    <div class="tbr">
+      <button class="btn" onclick="exportCSV()">⬇ Export CSV</button>
+      <button class="btn btn-k" onclick="go('caisse-new',document.querySelector('[data-page=caisse-new]'))">+ Encaissement</button>
+      <button class="btn btn-p" onclick="go('dt-new',document.querySelector('[data-page=dt-new]'))">+ Nouveau DT</button>
+    </div>
+  </div>
+  <div id="content">
+
+<!-- ========== DASHBOARD ========== -->
+<div id="page-dashboard" class="page active">
+  <div class="sr sr-5">
+    <div class="sc g"><div class="slbl">Dossiers techniques</div><div class="sval" id="s-dt" style="color:var(--cg)">0</div><div class="ssub">enregistrés</div></div>
+    <div class="sc p"><div class="slbl">DT en cours</div><div class="sval" id="s-dt-enc" style="color:#7B1FA2">0</div><div class="ssub">en constitution</div></div>
+    <div class="sc g"><div class="slbl">ACD approuvés</div><div class="sval" id="s-appr" style="color:var(--cg)">0</div><div class="ssub">titres définitifs</div></div>
+    <div class="sc t"><div class="slbl">Retirés</div><div class="sval" id="s-retrait" style="color:#0891B2">0</div><div class="ssub">documents retirés</div></div>
+    <div class="sc k"><div class="slbl">Recettes du jour</div><div class="sval" id="s-caisse" style="color:#B45309;font-size:18px">0 F</div><div class="ssub">encaissements</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="ch"><h3>Derniers dossiers techniques</h3><span class="chm" style="cursor:pointer;color:var(--cg)" onclick="go('dt-liste',document.querySelector('[data-page=dt-liste]'))">Voir tout →</span></div>
+      <div class="tw"><table><thead><tr><th>Réf. DT</th><th>Propriétaire</th><th>Type</th><th>Progression</th><th>Statut</th></tr></thead><tbody id="dash-dt-tb"></tbody></table></div>
+    </div>
+    <div class="card"><div class="ch"><h3>Activité récente</h3></div><div class="cb"><ul class="tl" id="tl-ul"></ul></div></div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>Derniers ACD</h3><span class="chm" style="cursor:pointer;color:var(--cg)" onclick="go('acd-liste',document.querySelector('[data-page=acd-liste]'))">Voir tout →</span></div>
+    <div class="tw"><table><thead><tr><th>Date</th><th>N° ATV</th><th>Nom et Prénoms</th><th>Ilôt</th><th>Lot</th><th>Lotissement</th><th>Statut</th></tr></thead><tbody id="dash-acd-tb"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ========== DT LISTE ========== -->
+<div id="page-dt-liste" class="page">
+  <div class="chips" id="chips-dt">
+    <div class="chip active" onclick="setDTF('',this)">Tous</div>
+    <div class="chip" onclick="setDTF('en_cours',this)">En cours</div>
+    <div class="chip" onclick="setDTF('complet',this)">Complets</div>
+    <div class="chip" onclick="setDTF('depose',this)">Déposés</div>
+    <div class="chip" onclick="setDTF('valide',this)">Validés</div>
+  </div>
+  <div class="sbar">
+    <div class="sw"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="q-dt" placeholder="Réf., propriétaire, lotissement..." oninput="renderDT()"></div>
+    <select class="fsel" id="f-type-dt" onchange="renderDT()"><option value="">Tous types</option><option value="LA">Lettre d'Attribution</option><option value="AV">Attestation Villageoise</option><option value="TF">Titre Foncier/ACP</option><option value="GS">Grande Superficie</option></select>
+    <button class="btn btn-p" onclick="go('dt-new',document.querySelector('[data-page=dt-new]'))">+ Nouveau dossier</button>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>Registre des dossiers techniques</h3><span class="chm" id="dt-cnt">0</span></div>
+    <div class="tw"><table>
+      <thead><tr><th>Réf. DT</th><th>Propriétaire</th><th>N° Pièce</th><th>Type</th><th>Lotissement / Lot</th><th>Progression</th><th>Statut</th><th>ACD</th><th>Actions</th></tr></thead>
+      <tbody id="dt-tbody"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ========== DT FORM ========== -->
+<div id="page-dt-new" class="page">
+  <div id="dt-edit-banner" class="info-box-g" style="display:none">Mode modification — Réf. : <strong id="dt-edit-ref-lbl"></strong></div>
+  <div class="info-box" id="dt-new-banner"><strong>Étape 1/2 — Dossier Technique</strong> : Constituez le dossier avant de créer l'ACD.</div>
+  <div class="card">
+    <div class="ch"><h3>Informations du dossier technique</h3></div>
+    <div class="cb">
+      <div class="fst">Identification du requérant</div>
+      <div class="fg3">
+        <div class="fg"><label>Réf. dossier <span class="req">*</span></label><input type="text" id="dt-ref" placeholder="auto ou manuel"></div>
+        <div class="fg"><label>Date de constitution</label><input type="date" id="dt-date"></div>
+        <div class="fg"><label>Type de dossier <span class="req">*</span></label>
+          <select id="dt-type" onchange="_dtFiles={};buildPieces();updFrais()">
+            <option value="LA">Lettre d'Attribution</option><option value="AV">Attestation Villageoise</option>
+            <option value="TF">Titre Foncier/ACP</option><option value="GS">Grande Superficie</option>
+          </select>
+        </div>
+        <div class="fg"><label>Nom et Prénoms <span class="req">*</span></label><input type="text" id="dt-nom" placeholder="NOM Prénom(s)"></div>
+        <div class="fg"><label>Type pièce d'identité</label>
+          <select id="dt-id-type"><option value="CNI">CNI</option><option value="CMU">CMU</option><option value="Passeport">Passeport</option><option value="Attestation">Attestation d'identité</option><option value="Permis">Permis de conduire</option></select>
+        </div>
+        <div class="fg"><label>N° pièce d'identité</label><input type="text" id="dt-id-num" placeholder="ex : CI0123456789"></div>
+        <div class="fg"><label>Contact (tél.)</label><input type="text" id="dt-tel" placeholder="07 00 00 00 00"></div>
+        <div class="fg"><label>Type requérant</label>
+          <select id="dt-req" onchange="updFrais()">
+            <option value="physique">Personne physique</option><option value="morale">Personne morale / Société</option><option value="ong">Association / ONG / Culte</option>
+          </select>
+        </div>
+      </div>
+      <div class="fst" style="margin-top:8px">Informations foncières</div>
+      <div class="fg3">
+        <div class="fg"><label>Lotissement</label><select id="dt-lot" onchange="checkDbl('dt')"><option value="">— Sélectionner —</option></select></div>
+        <div class="fg"><label>Commune</label><input type="text" id="dt-commune" placeholder="ex : Cocody"></div>
+        <div class="fg"><label>Quartier</label><input type="text" id="dt-quartier" placeholder="ex : Riviera 3"></div>
+        <div class="fg"><label>Ilôt</label><input type="text" id="dt-ilot" placeholder="ex : 347" oninput="checkDbl('dt')"></div>
+        <div class="fg">
+          <label>Lot</label>
+          <input type="text" id="dt-lot-n" placeholder="ex : 3925" oninput="checkDbl('dt')">
+          <div class="alert-doublon" id="dt-dbl"></div>
+        </div>
+        <div class="fg"><label>Superficie (m²)</label><input type="number" id="dt-sup" placeholder="ex : 500" min="0"></div>
+        <div class="fg ff"><label>Observations</label><textarea id="dt-obs" placeholder="Remarques..."></textarea></div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>Pièces du dossier technique</h3><span class="chm" id="dt-prog-lbl">0/0 pièces</span></div>
+    <div class="cb">
+      <div class="info-box-g" style="font-size:11px">Téléchargez chaque pièce. <strong style="color:var(--co)">Obligatoires</strong> = requis pour validation.</div>
+      <div id="pieces-container"></div>
+      <div class="prog-bar"><div class="prog-fill" id="dt-prog-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:var(--sur);border:1px solid var(--brd);border-radius:var(--rlg);box-shadow:var(--shsm)">
+    <div><div style="font-size:12px;font-weight:600" id="dt-save-status">Statut : <span style="color:var(--co)">Non enregistré</span></div><div style="font-size:11px;color:var(--tx3)" id="dt-frais-info"></div></div>
+    <div style="display:flex;gap:8px">
+      <button class="btn" onclick="cancelDTedit()">Annuler</button>
+      <button class="btn btn-b" onclick="saveDT('en_cours')">Enregistrer (en cours)</button>
+      <button class="btn btn-p" onclick="saveDT('complet')">Marquer complet → ACD</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ACD LISTE ========== -->
+<div id="page-acd-liste" class="page">
+  <div class="sbar">
+    <div class="sw"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="q-acd" placeholder="N° ATV, Nom, Lotissement..." oninput="renderACD()"></div>
+    <select class="fsel" id="f-st-acd" onchange="renderACD()"><option value="">Tous statuts</option><option value="approuve">Approuvé</option><option value="attente">En attente</option><option value="encours">En cours</option><option value="non-approuve">Non approuvé</option><option value="retrait">Retiré</option></select>
+    <select class="fsel" id="f-an-acd" onchange="renderACD()"><option value="">Toutes années</option></select>
+    <select class="fsel" id="f-lot-acd" onchange="renderACD()"><option value="">Tous lotissements</option></select>
+    <button class="btn btn-p" onclick="go('acd-new',document.querySelector('[data-page=acd-new]'))">+ Nouvel ACD</button>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>Registre des ACD</h3><span class="chm" id="acd-cnt">0</span></div>
+    <div class="tw"><table>
+      <thead><tr><th>Date</th><th>NOM ET PRÉNOMS</th><th>N° Pièce</th><th>Ilôt</th><th>Lot</th><th>N° ATV</th><th>N° ACD</th><th>Cessionnaires</th><th>Lotissement</th><th>DT</th><th>Statut</th><th>Actions</th></tr></thead>
+      <tbody id="acd-tbody"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ========== ACD FORM ========== -->
+<div id="page-acd-new" class="page">
+  <div id="acd-edit-banner" class="info-box-g" style="display:none">Mode modification — <strong id="acd-edit-ref-lbl"></strong></div>
+  <div class="info-box" id="acd-new-banner"><strong>Étape 2/2 — ACD</strong> : Établi après validation du dossier technique.</div>
+  <div id="acd-dt-selector"></div>
+  <div class="card">
+    <div class="ch"><h3>Informations du registre ACD</h3></div>
+    <div class="cb">
+      <div class="fst">Identification ACD</div>
+      <div class="fg3">
+        <div class="fg"><label>Réf. DT liée</label><select id="fa-dt-lien"><option value="">— Aucun —</option></select></div>
+        <div class="fg"><label>Date (année) <span class="req">*</span></label><input type="number" id="fa-date" placeholder="2025" min="2000" max="2050"></div>
+        <div class="fg"><label>N° ATV</label><input type="text" id="fa-atv" placeholder="ex : 00129"></div>
+        <div class="fg"><label>N° ACD officiel</label><input type="text" id="fa-acd-n" placeholder="ACD-2025-00001"></div>
+        <div class="fg"><label>Statut</label>
+          <select id="fa-statut">
+            <option value="attente">En attente</option><option value="encours">En cours</option>
+            <option value="approuve">Approuvé</option><option value="non-approuve">Non approuvé</option>
+            <option value="retrait">Retiré</option>
+          </select>
+        </div>
+      </div>
+      <!-- TITULAIRE -->
+      <div class="fst" style="margin-top:8px">Titulaire</div>
+      <div class="fg3">
+        <div class="fg"><label>Nom et Prénoms <span class="req">*</span></label><input type="text" id="fa-nom" placeholder="NOM Prénom(s)"></div>
+        <div class="fg"><label>Type pièce d'identité</label>
+          <select id="fa-id-type"><option value="CNI">CNI</option><option value="CMU">CMU</option><option value="Passeport">Passeport</option><option value="Attestation">Attestation d'identité</option><option value="Permis">Permis de conduire</option></select>
+        </div>
+        <div class="fg"><label>N° pièce d'identité</label><input type="text" id="fa-id-num" placeholder="ex : CI0123456789"></div>
+        <div class="fg"><label>Contact (tél.)</label><input type="text" id="fa-tel" placeholder="07 00 00 00 00"></div>
+        <div class="fg"><label>Type requérant</label>
+          <select id="fa-req-type"><option value="physique">Personne physique</option><option value="morale">Personne morale</option><option value="ong">ONG / Asso.</option></select>
+        </div>
+      </div>
+      <!-- CESSIONNAIRES -->
+      <div class="fst" style="margin-top:8px">Cessionnaires (jusqu'à 3)</div>
+      <div id="cess-blocks">
+        <!-- Générés dynamiquement -->
+      </div>
+      <button class="btn btn-ghost" id="btn-add-cess" onclick="addCessBlock()" style="margin-bottom:10px">+ Ajouter un cessionnaire</button>
+      <!-- FONCIER -->
+      <div class="fst" style="margin-top:4px">Informations foncières</div>
+      <div class="fg3">
+        <div class="fg"><label>Ilôt</label><input type="text" id="fa-ilot" placeholder="ex : 347" oninput="checkDbl('acd')"></div>
+        <div class="fg">
+          <label>Lot</label>
+          <input type="text" id="fa-lot" placeholder="ex : 3925" oninput="checkDbl('acd')">
+          <div class="alert-doublon" id="acd-dbl"></div>
+        </div>
+        <div class="fg"><label>Lotissement</label><select id="fa-lotissement" onchange="checkDbl('acd')"><option value="">— Sélectionner —</option></select></div>
+        <div class="fg"><label>Commune</label><input type="text" id="fa-commune" placeholder="ex : Cocody"></div>
+        <div class="fg"><label>Quartier</label><input type="text" id="fa-quartier" placeholder="ex : Riviera 3"></div>
+        <div class="fg"><label>Superficie (m²)</label><input type="number" id="fa-sup" placeholder="ex : 500" min="0"></div>
+        <div class="fg"><label>Type</label><select id="fa-type"><option>Résidentiel</option><option>Commercial</option><option>Industriel</option><option>Agricole</option><option>Mixte</option></select></div>
+        <div class="fg"><label>N° Livre Foncier</label><input type="text" id="fa-lf" placeholder="LF-CI-2025-XXXX"></div>
+        <div class="fg"><label>Réf. Cadastrale</label><input type="text" id="fa-cad" placeholder="AB-CD-123"></div>
+        <div class="fg ff"><label>Observations</label><textarea id="fa-obs" placeholder="Servitudes, conditions..."></textarea></div>
+      </div>
+      <!-- RETRAIT -->
+      <div id="retrait-section" style="display:none">
+        <div class="fst" style="margin-top:8px;color:#0891B2">Informations de retrait</div>
+        <div class="fg3">
+          <div class="fg"><label>Date de retrait</label><input type="date" id="fa-retrait-date"></div>
+          <div class="fg"><label>Heure de retrait</label><input type="time" id="fa-retrait-heure"></div>
+          <div class="fg"><label>Retiré par</label><input type="text" id="fa-retrait-par" placeholder="Nom du retireur"></div>
+          <div class="fg ff"><label>Document joint (ACD validé — joindre le fichier)</label>
+            <div class="upload-zone" style="padding:10px">
+              <input type="file" accept=".pdf,.jpg,.jpeg,.png" onchange="handleACDDoc(this)">
+              <p>Cliquer pour joindre le document ACD officiel</p>
+              <span>PDF, JPG, PNG — max 10 Mo</span>
+            </div>
+            <div id="acd-doc-preview" style="margin-top:6px"></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:9px;margin-top:12px;padding-top:12px;border-top:1px solid var(--brd)">
+        <button class="btn" onclick="cancelACDedit()">Annuler</button>
+        <button class="btn btn-p" id="acd-save-btn" onclick="saveACD()">Enregistrer l'ACD</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== CAISSE LISTE ========== -->
+<div id="page-caisse" class="page">
+  <div class="sr sr-4">
+    <div class="sc k"><div class="slbl">Total encaissé</div><div class="sval" id="ck-total" style="color:#B45309;font-size:18px">0 F</div><div class="ssub">toutes prestations</div></div>
+    <div class="sc g"><div class="slbl">Payés</div><div class="sval" id="ck-payes" style="color:var(--cg)">0</div></div>
+    <div class="sc o"><div class="slbl">Partiels</div><div class="sval" id="ck-part" style="color:var(--co)">0</div></div>
+    <div class="sc r"><div class="slbl">Impayés</div><div class="sval" id="ck-imp" style="color:#991B1B">0</div></div>
+  </div>
+  <div class="sbar">
+    <div class="sw"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="q-caisse" placeholder="N° reçu, client, prestation..." oninput="renderCaisse()"></div>
+    <select class="fsel" id="f-ck-st" onchange="renderCaisse()"><option value="">Tous statuts</option><option value="paye">Payé</option><option value="partiel">Partiel</option><option value="impaye">Impayé</option></select>
+    <select class="fsel" id="f-ck-type" onchange="renderCaisse()"><option value="">Toutes catégories</option></select>
+    <button class="btn btn-k" onclick="go('caisse-new',document.querySelector('[data-page=caisse-new]'))">+ Encaissement</button>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>Journal des encaissements</h3><span class="chm" id="caisse-cnt">0</span></div>
+    <div class="tw"><table>
+      <thead><tr><th>N° Reçu</th><th>Date / Heure</th><th>Client</th><th>Prestation</th><th>Dossier lié</th><th>Montant dû</th><th>Payé</th><th>Reste</th><th>Mode</th><th>Statut</th><th>Actions</th></tr></thead>
+      <tbody id="caisse-tbody"></tbody>
+    </table></div>
+  </div>
+</div>
+
+<!-- ========== CAISSE NOUVEAU ========== -->
+<div id="page-caisse-new" class="page">
+  <div id="ck-edit-banner" class="info-box-g" style="display:none">Mode modification — Reçu : <strong id="ck-edit-ref-lbl"></strong></div>
+  <div class="two-col">
+    <div class="card">
+      <div class="ch"><h3>Nouvelle opération</h3></div>
+      <div class="cb">
+        <div class="fst">Identification</div>
+        <div class="fg2">
+          <div class="fg"><label>N° Reçu <span class="req">*</span></label><input type="text" id="ck-ref" placeholder="auto"></div>
+          <div class="fg"><label>Date <span class="req">*</span></label><input type="date" id="ck-date"></div>
+          <div class="fg"><label>Heure</label><input type="time" id="ck-heure"></div>
+          <div class="fg"><label>Client <span class="req">*</span></label><input type="text" id="ck-client" placeholder="Nom complet"></div>
+          <div class="fg"><label>Dossier lié (DT / ACD)</label><select id="ck-dossier"><option value="">— Aucun —</option></select></div>
+          <div class="fg"><label>Mode de paiement</label>
+            <select id="ck-mode"><option value="especes">Espèces</option><option value="cheque">Chèque</option><option value="virement">Virement</option><option value="mobile">Mobile Money</option></select>
+          </div>
+          <div class="fg"><label>N° Chèque / Référence</label><input type="text" id="ck-ref-pmt" placeholder="Optionnel"></div>
+        </div>
+        <div class="fst" style="margin-top:8px">Montants</div>
+        <div class="fg3">
+          <div class="fg"><label>Montant dû (F CFA) <span class="req">*</span></label><input type="number" id="ck-du" placeholder="0" min="0" oninput="updCKCalc()"></div>
+          <div class="fg"><label>Montant payé (F CFA)</label><input type="number" id="ck-paye" placeholder="0" min="0" oninput="updCKCalc()"></div>
+          <div class="fg"><label>Reste à payer</label><input type="text" id="ck-reste" readonly style="background:var(--sur2);font-weight:700;color:#B45309"></div>
+        </div>
+        <div class="fg" style="margin-top:8px"><label>Observations</label><textarea id="ck-obs" placeholder="Remarques..." style="min-height:50px"></textarea></div>
+        <div style="display:flex;justify-content:flex-end;gap:9px;margin-top:12px;padding-top:12px;border-top:1px solid var(--brd)">
+          <button class="btn" onclick="cancelCKedit()">Annuler</button>
+          <button class="btn btn-k" onclick="saveCaisse()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="ch"><h3>Catalogue des prestations</h3><span class="chm" id="prest-sel-lbl">Aucune sélectionnée</span></div>
+        <div class="cb" style="padding:10px">
+          <div class="sw" style="margin-bottom:10px"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="q-prest" placeholder="Rechercher une prestation..." oninput="renderPrestations()"></div>
+          <div id="prestations-list" style="max-height:440px;overflow-y:auto"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== WORKFLOW ========== -->
+<div id="page-workflow" class="page">
+  <div class="sr sr-4">
+    <div class="sc p"><div class="slbl">DT en constitution</div><div class="sval" id="wf-dt" style="color:#7B1FA2">0</div></div>
+    <div class="sc o"><div class="slbl">ACD en attente</div><div class="sval" id="wf-att" style="color:var(--co)">0</div></div>
+    <div class="sc b"><div class="slbl">ACD en cours</div><div class="sval" id="wf-enc" style="color:#1565C0">0</div></div>
+    <div class="sc r"><div class="slbl">ACD non approuvés</div><div class="sval" id="wf-nap" style="color:#991B1B">0</div></div>
+  </div>
+  <div class="card" style="margin-bottom:14px"><div class="ch"><h3>Dossiers techniques — Statut</h3></div><div class="cb" id="wf-dt-body"></div></div>
+  <div class="card"><div class="ch"><h3>ACD en instruction — Statut</h3></div><div class="cb" id="wf-acd-body"></div></div>
+</div>
+
+<!-- ========== RAPPORTS ========== -->
+<div id="page-rapports" class="page">
+  <div class="two-col" style="margin-bottom:14px">
+    <div class="card"><div class="ch"><h3>ACD par statut</h3></div><div class="cb" id="rpt-st"></div></div>
+    <div class="card"><div class="ch"><h3>ACD par type</h3></div><div class="cb" id="rpt-ty"></div></div>
+  </div>
+  <div class="two-col">
+    <div class="card"><div class="ch"><h3>Recettes par catégorie</h3></div><div class="cb" id="rpt-caisse"></div></div>
+    <div class="card"><div class="ch"><h3>Synthèse</h3></div><div class="cb"><div class="three-col" id="rpt-syn"></div><div style="margin-top:14px" id="rpt-lot"></div></div></div>
+  </div>
+</div>
+
+<!-- ========== NOMENCLATURE ========== -->
+<div id="page-nomenclature" class="page">
+  <div class="two-col">
+    <div class="card"><div class="ch"><h3>ACD via Lettre d'Attribution</h3></div><div class="cb">
+      <ul style="font-size:12px;color:var(--tx2);line-height:2;padding-left:16px">
+        <li>Un (1) calque + 21 photocopies A3</li><li>Tableau de calcul de surfaces</li>
+        <li>Rapport de géomètre + géo-référencement</li><li>Plan de situation (A4/A3)</li>
+        <li>Fiche de demande d'ACD + Fiche cadastrale</li>
+        <li>Original + 4 copies Lettre d'Attribution</li><li>4 copies CNI (1 couleur)</li>
+      </ul>
+      <table class="frais-table"><thead><tr><th>Requérant</th><th>Frais/Lot</th><th>Chemise</th></tr></thead>
+      <tbody><tr><td>Personne physique</td><td class="amount">90 000 F</td><td>1 000 F</td></tr>
+      <tr><td>Personne morale</td><td class="amount">250 000 F</td><td>1 000 F</td></tr>
+      <tr><td>ONG / Asso.</td><td class="amount">100 000 F</td><td>1 000 F</td></tr></tbody></table>
+    </div></div>
+    <div class="card"><div class="ch"><h3>ACD — Grandes superficies</h3><span class="badge bn">+10Ha ZAD</span></div><div class="cb">
+      <ul style="font-size:12px;color:var(--tx2);line-height:2;padding-left:16px">
+        <li>Calque + 21 copies A3 (géomètre expert)</li><li>Tableau calcul données + surfaces</li>
+        <li>Rapport géomètre + géo-référencement</li><li>Plan de situation</li>
+        <li>Original + 4 copies attestation cession + villageoise</li>
+        <li>CD/USB avec données techniques</li><li>4 copies CNI (1 couleur)</li>
+        <li>Statuts (personnes morales)</li>
+      </ul>
+      <div style="font-size:11px;padding:8px;background:var(--cop);border-radius:var(--rmd);margin-top:8px;color:var(--tx2)">
+        <strong style="color:var(--co)">ZAD :</strong> &lt;10Ha → Courrier Ministre. &gt;10Ha → Courrier + projet.
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<!-- ========== REDEVANCES ========== -->
+<div id="page-redevances" class="page">
+  <div class="card">
+    <div class="ch"><h3>Barème officiel des redevances — Ministère de la Construction</h3><span class="chm">+ 1 000 F CFA pochette</span></div>
+    <div class="cb">
+      <div class="sbar">
+        <div class="sw"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="q-red" placeholder="Rechercher un acte..." oninput="renderRed()"></div>
+        <select class="fsel" id="f-red-srv" onchange="renderRed()"><option value="">Tous services</option><option value="DGUF">DGUF/DU</option><option value="DDU">DDU</option><option value="DL">DL</option><option value="DAJC">DAJC</option><option value="DTC">DTC</option></select>
+      </div>
+      <div class="tw redtbl"><table>
+        <thead><tr><th>N°</th><th>Service</th><th>Acte</th><th>Superficies</th><th>Particulier</th><th>Société</th><th>ONG</th></tr></thead>
+        <tbody id="red-tbody"></tbody>
+      </table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== LOTISSEMENTS ========== -->
+<div id="page-lotissements" class="page">
+  <div class="sbar">
+    <div class="sw"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input type="text" id="q-lot" placeholder="Rechercher..." oninput="renderLots()"></div>
+    <button class="btn btn-p" onclick="openM('m-lot')">+ Ajouter lotissement</button>
+  </div>
+  <div class="card">
+    <div class="ch"><h3>Référentiel des lotissements</h3><span class="chm" id="lot-cnt">0</span></div>
+    <div class="tw"><table><thead><tr><th>Nom</th><th>DT liés</th><th>ACD liés</th><th>Actions</th></tr></thead><tbody id="lot-tbody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ========== CONFIGURATION ========== -->
+<div id="page-config" class="page">
+  <div class="cfg-section">
+    <h3>Identité de l'organisation</h3>
+    <div class="fg2">
+      <div>
+        <div class="fg" style="margin-bottom:10px"><label>Nom de l'organisation</label><input type="text" id="cfg-org-name" placeholder="ex : Ministère de la Construction"></div>
+        <div class="fg" style="margin-bottom:10px"><label>Sous-titre / localisation</label><input type="text" id="cfg-org-sub" placeholder="ex : Guichet Unique du Foncier — Abidjan"></div>
+        <div class="fg" style="margin-bottom:10px"><label>Nom de l'application</label><input type="text" id="cfg-app-name" placeholder="ex : GestionACD"></div>
+        <div class="fg" style="margin-bottom:10px"><label>Nom de l'agent / Utilisateur</label><input type="text" id="cfg-username" placeholder="ex : Agent Guichet"></div>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:500;color:var(--tx2);display:block;margin-bottom:6px">Logo de l'organisation</label>
+        <div class="cfg-logo-preview" id="cfg-logo-preview" style="margin-bottom:10px">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg>
+        </div>
+        <div class="upload-zone" style="padding:10px">
+          <input type="file" accept=".jpg,.jpeg,.png,.svg" onchange="handleLogoUpload(this)">
+          <p>Cliquer pour uploader le logo</p>
+          <span>JPG, PNG, SVG — max 2 Mo</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:6px;color:#991B1B" onclick="removeLogo()">Supprimer le logo</button>
+      </div>
+    </div>
+  </div>
+  <div class="cfg-section">
+    <h3>Préfixes et numérotation automatique</h3>
+    <div class="fg3">
+      <div class="fg"><label>Préfixe N° Reçu Caisse</label><input type="text" id="cfg-pfx-rec" placeholder="ex : REC"></div>
+      <div class="fg"><label>Préfixe Réf. ACD</label><input type="text" id="cfg-pfx-acd" placeholder="ex : ACD"></div>
+      <div class="fg"><label>Préfixe Réf. DT</label><input type="text" id="cfg-pfx-dt" placeholder="ex : DT"></div>
+      <div class="fg"><label>Année en cours</label><input type="number" id="cfg-year" placeholder="2025" min="2020" max="2040"></div>
+      <div class="fg"><label>Compteur reçu (prochain)</label><input type="number" id="cfg-cnt-rec" placeholder="1" min="1"></div>
+      <div class="fg"><label>Compteur DT (prochain)</label><input type="number" id="cfg-cnt-dt" placeholder="1" min="1"></div>
+    </div>
+  </div>
+  <div class="cfg-section">
+    <h3>Paramètres du reçu de caisse</h3>
+    <div class="fg2">
+      <div class="fg"><label>Mention pied de page ligne 1</label><input type="text" id="cfg-recu-foot1" placeholder="ex : Document officiel — Ministère de la Construction"></div>
+      <div class="fg"><label>Mention pied de page ligne 2</label><input type="text" id="cfg-recu-foot2" placeholder="ex : Tel : 2720 23 41 17 / 1378"></div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:9px;margin-top:4px">
+    <button class="btn" onclick="loadConfig()">Réinitialiser</button>
+    <button class="btn btn-p" onclick="saveConfig()">Enregistrer la configuration</button>
+  </div>
+</div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- MODAL STATUT DT -->
+<div class="mov" id="m-st-dt">
+  <div class="mbox sm">
+    <div class="mhead"><h3>Modifier statut — DT</h3><button class="mcls" onclick="closeM('m-st-dt')">×</button></div>
+    <div class="mbody">
+      <p style="font-size:11px;color:var(--tx3);margin-bottom:12px">Dossier : <strong id="mdt-st-id"></strong></p>
+      <div class="sopt" onclick="selStDT('en_cours',this)"><div class="sodot" style="background:#7B1FA2"></div><div><div class="solbl">En cours</div><div class="sodesc">Dossier en constitution</div></div></div>
+      <div class="sopt" onclick="selStDT('complet',this)"><div class="sodot" style="background:#0A5C35"></div><div><div class="solbl">Complet</div><div class="sodesc">Toutes les pièces fournies</div></div></div>
+      <div class="sopt" onclick="selStDT('depose',this)"><div class="sodot" style="background:#0369A1"></div><div><div class="solbl">Déposé</div><div class="sodesc">Remis au Guichet Unique</div></div></div>
+      <div class="sopt" onclick="selStDT('valide',this)"><div class="sodot" style="background:#16A34A"></div><div><div class="solbl">Validé</div><div class="sodesc">DT approuvé par le service</div></div></div>
+      <div class="fg" style="margin-top:10px"><label>Commentaire</label><textarea id="mdt-st-cmt" style="min-height:50px" placeholder="Motif..."></textarea></div>
+    </div>
+    <div class="mfoot"><button class="btn" onclick="closeM('m-st-dt')">Annuler</button><button class="btn btn-p" onclick="applyStDT()">Appliquer</button></div>
+  </div>
+</div>
+
+<!-- MODAL STATUT ACD -->
+<div class="mov" id="m-st-acd">
+  <div class="mbox sm">
+    <div class="mhead"><h3>Modifier statut ACD</h3><button class="mcls" onclick="closeM('m-st-acd')">×</button></div>
+    <div class="mbody">
+      <p style="font-size:11px;color:var(--tx3);margin-bottom:12px">Dossier : <strong id="macd-st-id"></strong></p>
+      <div class="sopt" onclick="selStACD('approuve',this)"><div class="sodot" style="background:#0A5C35"></div><div><div class="solbl">Approuvé</div><div class="sodesc">Titre définitif délivré</div></div></div>
+      <div class="sopt" onclick="selStACD('encours',this)"><div class="sodot" style="background:#1D4ED8"></div><div><div class="solbl">En cours d'instruction</div><div class="sodesc">En traitement</div></div></div>
+      <div class="sopt" onclick="selStACD('attente',this)"><div class="sodot" style="background:#B45309"></div><div><div class="solbl">En attente</div><div class="sodesc">Déposé, en attente</div></div></div>
+      <div class="sopt" onclick="selStACD('non-approuve',this)"><div class="sodot" style="background:#991B1B"></div><div><div class="solbl">Non approuvé</div><div class="sodesc">Rejeté ou incomplet</div></div></div>
+      <div class="sopt" onclick="selStACD('retrait',this)"><div class="sodot" style="background:#0891B2"></div><div><div class="solbl">Retiré</div><div class="sodesc">Document retiré par le client</div></div></div>
+      <div class="fg" style="margin-top:10px"><label>Commentaire</label><textarea id="macd-st-cmt" style="min-height:50px" placeholder="Motif..."></textarea></div>
+      <div id="retrait-st-fields" style="display:none;margin-top:10px">
+        <div class="fg2">
+          <div class="fg"><label>Date de retrait</label><input type="date" id="macd-retrait-date"></div>
+          <div class="fg"><label>Heure de retrait</label><input type="time" id="macd-retrait-heure"></div>
+          <div class="fg ff"><label>Retiré par</label><input type="text" id="macd-retrait-par" placeholder="Nom du retireur"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot"><button class="btn" onclick="closeM('m-st-acd')">Annuler</button><button class="btn btn-p" onclick="applyStACD()">Appliquer</button></div>
+  </div>
+</div>
+
+<!-- MODAL RECU -->
+<div class="mov" id="m-recu">
+  <div class="mbox recu-w">
+    <div class="mhead"><h3>Reçu de paiement — 3 exemplaires</h3><button class="mcls" onclick="closeM('m-recu')">×</button></div>
+    <div class="mbody" id="m-recu-body" style="padding:12px"></div>
+    <div class="mfoot"><button class="btn" onclick="closeM('m-recu')">Fermer</button><button class="btn btn-k" onclick="window.print()">🖨 Imprimer 3 exemplaires</button></div>
+  </div>
+</div>
+
+<!-- MODAL LOT -->
+<div class="mov" id="m-lot">
+  <div class="mbox sm">
+    <div class="mhead"><h3>Ajouter un lotissement</h3><button class="mcls" onclick="closeM('m-lot')">×</button></div>
+    <div class="mbody"><div class="fg"><label>Nom <span class="req">*</span></label><input type="text" id="ml-nom" placeholder="ex : PRONIANI EXTENSION"></div></div>
+    <div class="mfoot"><button class="btn" onclick="closeM('m-lot')">Annuler</button><button class="btn btn-p" onclick="saveLot()">Ajouter</button></div>
+  </div>
+</div>
+
+<div id="file-viewer"><button id="fv-close" onclick="closeViewer()">×</button><div id="fv-content"></div><div id="fv-name"></div></div>
+<div id="toast"></div>
+
+<script>
+/* ================================================================
+   CONFIG
+================================================================ */
+let CFG = JSON.parse(localStorage.getItem('g5_cfg') || JSON.stringify({
+  orgName:'Ministère de la Construction, du Logement et de l\'Urbanisme',
+  orgSub:'Guichet Unique du Foncier — Côte d\'Ivoire',
+  appName:'GestionACD',
+  username:'Agent Guichet',
+  logoData:'',
+  pfxRec:'REC',pfxAcd:'ACD',pfxDt:'DT',
+  year:new Date().getFullYear(),
+  cntRec:1,cntDt:1,
+  recuFoot1:'Document officiel — Ministère de la Construction',
+  recuFoot2:'Tel : 2720 23 41 17 / 1378 — construction.gouv.ci'
+}));
+
+function saveConfig(){
+  CFG.orgName=g('cfg-org-name').value||CFG.orgName;
+  CFG.orgSub=g('cfg-org-sub').value||CFG.orgSub;
+  CFG.appName=g('cfg-app-name').value||CFG.appName;
+  CFG.username=g('cfg-username').value||CFG.username;
+  CFG.pfxRec=g('cfg-pfx-rec').value||CFG.pfxRec;
+  CFG.pfxAcd=g('cfg-pfx-acd').value||CFG.pfxAcd;
+  CFG.pfxDt=g('cfg-pfx-dt').value||CFG.pfxDt;
+  CFG.year=parseInt(g('cfg-year').value)||CFG.year;
+  CFG.cntRec=parseInt(g('cfg-cnt-rec').value)||CFG.cntRec;
+  CFG.cntDt=parseInt(g('cfg-cnt-dt').value)||CFG.cntDt;
+  CFG.recuFoot1=g('cfg-recu-foot1').value||CFG.recuFoot1;
+  CFG.recuFoot2=g('cfg-recu-foot2').value||CFG.recuFoot2;
+  localStorage.setItem('g5_cfg',JSON.stringify(CFG));
+  applyConfig();toast('Configuration enregistrée ✓');
+}
+
+function loadConfig(){
+  const fields={
+    'cfg-org-name':CFG.orgName,'cfg-org-sub':CFG.orgSub,'cfg-app-name':CFG.appName,
+    'cfg-username':CFG.username,'cfg-pfx-rec':CFG.pfxRec,'cfg-pfx-acd':CFG.pfxAcd,
+    'cfg-pfx-dt':CFG.pfxDt,'cfg-year':CFG.year,'cfg-cnt-rec':CFG.cntRec,
+    'cfg-cnt-dt':CFG.cntDt,'cfg-recu-foot1':CFG.recuFoot1,'cfg-recu-foot2':CFG.recuFoot2
+  };
+  Object.entries(fields).forEach(([id,v])=>{const e=g(id);if(e)e.value=v;});
+  updLogoPreview();
+}
+
+function applyConfig(){
+  document.getElementById('app-title').textContent=CFG.appName+' — Foncier Urbain CI';
+  document.getElementById('sb-app-name').textContent=CFG.appName;
+  document.getElementById('sb-app-sub').textContent=CFG.orgSub;
+  document.getElementById('sb-username').textContent=CFG.username;
+  document.getElementById('sb-org').textContent=CFG.orgName;
+  const av=document.getElementById('sb-ava');
+  if(av)av.textContent=(CFG.username||'AG').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  updLogoPreview();
+}
+
+function updLogoPreview(){
+  const lp=document.getElementById('cfg-logo-preview');
+  const sbl=document.getElementById('sb-logo');
+  if(!lp)return;
+  if(CFG.logoData){
+    lp.innerHTML=`<img src="${CFG.logoData}" alt="logo">`;
+    if(sbl)sbl.innerHTML=`<img src="${CFG.logoData}" alt="logo">`;
+  } else {
+    lp.innerHTML=`<svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg>`;
+    if(sbl)sbl.innerHTML=`<svg viewBox="0 0 24 24" width="17" height="17" fill="white"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-4h6v4"/></svg>`;
+  }
+}
+
+function handleLogoUpload(inp){
+  const file=inp.files[0];if(!file)return;
+  if(file.size>2*1024*1024){toast('Logo trop volumineux (max 2 Mo)','err');return;}
+  b64File(file,(data)=>{CFG.logoData=data;updLogoPreview();toast('Logo chargé — pensez à enregistrer ✓');});
+}
+function removeLogo(){CFG.logoData='';updLogoPreview();toast('Logo supprimé');}
+
+function autoRef(type){
+  const y=CFG.year;
+  if(type==='rec'){const n=String(CFG.cntRec).padStart(5,'0');return `${CFG.pfxRec}-${y}-${n}`;}
+  if(type==='dt'){const n=String(CFG.cntDt).padStart(5,'0');return `${CFG.pfxDt}-${y}-${n}`;}
+  if(type==='acd'){return `${CFG.pfxAcd}-${y}-`;}
+  return '';
+}
+
+/* ================================================================
+   DATA STORE
+================================================================ */
+let DT    = JSON.parse(localStorage.getItem('g5_dt')    || '[]');
+let ACD   = JSON.parse(localStorage.getItem('g5_acd')   || '[]');
+let TL    = JSON.parse(localStorage.getItem('g5_tl')    || '[]');
+let LOTS  = JSON.parse(localStorage.getItem('g5_lots')  || JSON.stringify(['PRONIANI EXTENSION','MANOUFLA 2ème TRANCHE','DJAMANDJI EXTENSION','KOBLATA II','KOBLATA III','ANONO EXTENSION','RIVIERA EXTENSION','ANGRÉ EXTENSION','DJIBI EXTENSION','BINGERVILLE EXTENSION','ABOBO EXTENSION','SAN PEDRO EXTENSION','YOPOUGON EXTENSION']));
+let CAISSE= JSON.parse(localStorage.getItem('g5_caisse')|| '[]');
+let _FS   = JSON.parse(localStorage.getItem('g5_files') || '{}');
+
+function ps(k){
+  if(!k||k==='dt')    localStorage.setItem('g5_dt',    JSON.stringify(DT));
+  if(!k||k==='acd')   localStorage.setItem('g5_acd',   JSON.stringify(ACD));
+  if(!k||k==='tl')    localStorage.setItem('g5_tl',    JSON.stringify(TL.slice(-80)));
+  if(!k||k==='lots')  localStorage.setItem('g5_lots',  JSON.stringify(LOTS));
+  if(!k||k==='caisse')localStorage.setItem('g5_caisse',JSON.stringify(CAISSE));
+  if(!k||k==='files') localStorage.setItem('g5_files', JSON.stringify(_FS));
+}
+
+/* ================================================================
+   EDIT STATE
+================================================================ */
+let _eDT=-1, _eACD=-1, _eCK=-1;
+let _dtFiles={};
+let _dtStIdx=null,_dtStVal=null,_acdStIdx=null,_acdStVal=null;
+let _selPrest=null;
+let _acdDocData=null;
+let _numCess=1;
+
+/* ================================================================
+   PIECES
+================================================================ */
+const PIECES={
+  LA:[
+    {id:'calque',req:true,label:'Calque de la parcelle',desc:'Un (1) calque original de la parcelle.'},
+    {id:'copies_A3',req:true,label:'21 photocopies du calque (A3)',desc:'Vingt et une (21) photocopies du calque en format A3.'},
+    {id:'calc_surf',req:true,label:'Tableau de calcul de surfaces',desc:'Un (1) tableau de calcul de surfaces.'},
+    {id:'rapport_geo',req:true,label:'Rapport de géomètre',desc:'Un (1) rapport officiel du géomètre expert.'},
+    {id:'georef',req:true,label:'Calculs géo-référencement',desc:'Calculs liés au géo-référencement de la parcelle.'},
+    {id:'plan_situ',req:true,label:'Plan de situation (A4/A3)',desc:'Un (1) plan de situation.'},
+    {id:'fiche_acd',req:true,label:"Fiche de demande d'ACD",desc:"Une (1) Fiche de demande d'ACD."},
+    {id:'fiche_cad',req:true,label:'Fiche renseignement cadastrale',desc:'Une Fiche de renseignement cadastrale.'},
+    {id:'lettre_att',req:true,label:"Original + 4 copies Lettre d'Attribution",desc:"Original + 4 photocopies de la Lettre d'Attribution."},
+    {id:'cni',req:true,label:'4 copies CNI (1 en couleur)',desc:'Quatre (4) photocopies CNI dont une (1) en couleur.'},
+  ],
+  AV:[
+    {id:'calque',req:true,label:'Calque de la parcelle',desc:'Un (1) calque original.'},
+    {id:'copies_A3',req:true,label:'21 photocopies calque (A3)',desc:'Vingt et une (21) photocopies A3.'},
+    {id:'calc_surf',req:true,label:'Tableau de calcul de surfaces',desc:'Un (1) tableau.'},
+    {id:'rapport_geo',req:true,label:'Rapport de géomètre',desc:'Un (1) rapport du géomètre.'},
+    {id:'georef',req:true,label:'Calculs géo-référencement',desc:'Calculs géo-référencement.'},
+    {id:'plan_situ',req:true,label:'Plan de situation',desc:'Un (1) plan de situation.'},
+    {id:'att_cession',req:true,label:'Original + 4 copies Att. cession',desc:'Original + 4 photocopies attestation de cession.'},
+    {id:'att_village',req:true,label:'Attestation villageoise',desc:'Attestation villageoise originale.'},
+    {id:'cd_usb',req:true,label:'CD ou clé USB',desc:'CD/USB avec données et coordonnées.'},
+    {id:'cni',req:true,label:'4 copies CNI (1 en couleur)',desc:'Quatre (4) photocopies CNI (1 couleur).'},
+    {id:'statuts',req:false,label:'4 copies statuts (pers. morales)',desc:'Pour personnes morales uniquement.'},
+  ],
+  TF:[
+    {id:'calque',req:true,label:'Calque de la parcelle',desc:'Un (1) calque original.'},
+    {id:'copies_A3',req:true,label:'21 photocopies calque (A3)',desc:'Vingt et une (21) photocopies A3.'},
+    {id:'calc_surf',req:true,label:'Tableau de calcul de surfaces',desc:'Un (1) tableau.'},
+    {id:'rapport_geo',req:true,label:'Rapport de géomètre',desc:'Un (1) rapport du géomètre.'},
+    {id:'plan_situ',req:true,label:'Plan de situation',desc:'Un (1) plan de situation.'},
+    {id:'tf_acp',req:true,label:'Titre Foncier/ACP + 4 copies',desc:'TF ou ACP original + 4 photocopies.'},
+    {id:'cni',req:true,label:'4 copies CNI (1 en couleur)',desc:'Quatre (4) photocopies CNI (1 couleur).'},
+  ],
+  GS:[
+    {id:'calque',req:true,label:'Calque de la parcelle',desc:'Un (1) calque original (géomètre expert).'},
+    {id:'copies_A3',req:true,label:'21 photocopies calque (A3)',desc:'Vingt et une (21) photocopies A3.'},
+    {id:'calc_data',req:true,label:'Tableau calcul données',desc:'Un (1) tableau de calcul des données.'},
+    {id:'calc_surf',req:true,label:'Tableau de calcul surfaces',desc:'Un (1) tableau de calcul de surfaces.'},
+    {id:'rapport_geo',req:true,label:'Rapport du géomètre',desc:'Un (1) rapport du géomètre.'},
+    {id:'georef',req:true,label:'Calculs géo-référencement',desc:'Calculs géo-référencement.'},
+    {id:'plan_situ',req:true,label:'Plan de situation',desc:'Un (1) plan de situation.'},
+    {id:'att_cession',req:true,label:'Att. cession + 4 copies',desc:'Original + 4 photocopies attestation cession.'},
+    {id:'att_village',req:true,label:'Attestation villageoise',desc:'Attestation villageoise originale.'},
+    {id:'cd_usb',req:true,label:'CD ou clé USB',desc:'CD/USB avec données.'},
+    {id:'cni',req:true,label:'4 copies CNI (1 en couleur)',desc:'Quatre (4) photocopies CNI (1 couleur).'},
+    {id:'statuts',req:false,label:'4 copies statuts (pers. morales)',desc:'Pour personnes morales uniquement.'},
+    {id:'courrier',req:false,label:'Courrier au Ministre',desc:'Obligatoire si parcelle en ZAD.'},
+  ]
+};
+
+/* ================================================================
+   PRESTATIONS CATALOGUE
+================================================================ */
+const PRESTS=[
+  {id:'fd_la_phy',cat:'Frais dépôt dossier',label:"Dépôt ACD — Lettre Attribution (Particulier)",montant:91000,desc:'90 000 F + 1 000 F chemise'},
+  {id:'fd_la_mor',cat:'Frais dépôt dossier',label:"Dépôt ACD — Lettre Attribution (Société)",montant:251000,desc:'250 000 F + 1 000 F chemise'},
+  {id:'fd_la_ong',cat:'Frais dépôt dossier',label:"Dépôt ACD — Lettre Attribution (ONG/Asso.)",montant:101000,desc:'100 000 F + 1 000 F chemise'},
+  {id:'fd_av_phy',cat:'Frais dépôt dossier',label:'Dépôt ACD — Attestation Villageoise (Particulier)',montant:91000,desc:'90 000 F + 1 000 F chemise'},
+  {id:'fd_av_mor',cat:'Frais dépôt dossier',label:'Dépôt ACD — Attestation Villageoise (Société)',montant:251000,desc:'250 000 F + 1 000 F chemise'},
+  {id:'fd_av_ong',cat:'Frais dépôt dossier',label:'Dépôt ACD — Attestation Villageoise (ONG)',montant:101000,desc:'100 000 F + 1 000 F chemise'},
+  {id:'fd_gs_phy',cat:'Frais dépôt dossier',label:'Dépôt ACD — Grande Superficie 0–0,5Ha (Particulier)',montant:116000,desc:'115 000 F + 1 000 F chemise'},
+  {id:'fd_gs_mor',cat:'Frais dépôt dossier',label:'Dépôt ACD — Grande Superficie 0–0,5Ha (Société)',montant:276000,desc:'275 000 F + 1 000 F chemise'},
+  {id:'fd_gs_ong',cat:'Frais dépôt dossier',label:'Dépôt ACD — Grande Superficie 0–0,5Ha (ONG)',montant:126000,desc:'125 000 F + 1 000 F chemise'},
+  {id:'r_acd_att',cat:'Redevances DGUF',label:'ACD — Attestation',montant:70000,desc:'Redevance DGUF'},
+  {id:'r_acd_la',cat:'Redevances DGUF',label:"ACD — Lettre d'Attribution",montant:60000,desc:'Redevance DGUF'},
+  {id:'r_acd_reg',cat:'Redevances DGUF',label:'ACD — Régularisation',montant:70000,desc:'Redevance DGUF'},
+  {id:'r_acd_acp',cat:'Redevances DGUF',label:'ACD — ACP + LA + TF',montant:50000,desc:'Redevance DGUF'},
+  {id:'r_cert_urb',cat:'Redevances DGUF',label:"Certificat d'urbanisme",montant:5000,desc:'Redevance DGUF'},
+  {id:'r_plan_sit',cat:'Redevances DGUF',label:'Plan de situation',montant:5000,desc:'Redevance DGUF'},
+  {id:'r_derog',cat:'Redevances DGUF',label:'Dérogation',montant:500000,desc:'Redevance DGUF'},
+  {id:'r_lot_int',cat:'Redevances DGUF',label:'Lotissement intérieur du pays',montant:70000,desc:'Redevance DGUF'},
+  {id:'r_auto_lot',cat:'Redevances DGUF',label:'Autorisation de lotir',montant:500000,desc:'Redevance DGUF'},
+  {id:'r_transfert',cat:'Redevances DDU',label:'Transfert',montant:60000,desc:'Redevance DDU'},
+  {id:'r_dupl',cat:'Redevances DDU',label:"Duplicata d'ACD (Particulier)",montant:80000,desc:'Redevance DDU'},
+  {id:'r_dupl_s',cat:'Redevances DDU',label:"Duplicata d'ACD (Société)",montant:240000,desc:'Redevance DDU'},
+  {id:'r_visit',cat:'Redevances DDU',label:"Visite technique d'identification",montant:25000,desc:'Redevance DDU'},
+  {id:'r_rad',cat:'Redevances DDU',label:'Radiation de clause',montant:20000,desc:'Redevance DDU'},
+  {id:'r_bail',cat:'Redevances DDU',label:'Bail emphytéotique',montant:40000,desc:'Redevance DDU'},
+  {id:'r_att_la',cat:'Redevances DDU',label:"Attestation de Lettre d'Attribution",montant:5000,desc:'Redevance DDU'},
+  {id:'r_etat',cat:'Redevances DDU',label:'État domanial / Position foncier',montant:5000,desc:'Redevance DDU'},
+  {id:'r_acd_hl_att',cat:'Redevances DDU',label:'ACD hors lot. — Attestation (Part. 0–0,5Ha)',montant:115000,desc:'Redevance DDU'},
+  {id:'r_acd_hl_la',cat:'Redevances DDU',label:"ACD hors lot. — Lettre d'Attribution (Part. 0–0,5Ha)",montant:100000,desc:'Redevance DDU'},
+  {id:'r_pc_mun',cat:'Redevances DL',label:'Permis de construire municipal',montant:50000,desc:'Redevance DL'},
+  {id:'r_pc_min',cat:'Redevances DL',label:'Permis de construire ministériel',montant:100000,desc:'Redevance DL'},
+  {id:'r_agr_pr',cat:'Redevances DL',label:'Agrément promoteur immobilier',montant:100000,desc:'Redevance DL'},
+  {id:'r_agr_ag',cat:'Redevances DL',label:'Agrément agent immobilier',montant:50000,desc:'Redevance DL'},
+  {id:'r_exp',cat:'Redevances DL',label:'Expertise immobilière',montant:30000,desc:'Redevance DL'},
+  {id:'r_non_log',cat:'Redevances DL',label:'Attestation de non logement',montant:5000,desc:'Redevance DL'},
+  {id:'r_arret',cat:'Redevances DAJC',label:'Arrêt urgent de travaux',montant:10000,desc:'Redevance DAJC'},
+  {id:'r_demol',cat:'Redevances DAJC',label:'Démolition',montant:10000,desc:'Redevance DAJC'},
+  {id:'r_deg',cat:'Redevances DAJC',label:'Déguerpissement',montant:10000,desc:'Redevance DAJC'},
+  {id:'r_main',cat:'Redevances DAJC',label:'Demande de mainlevée',montant:0,desc:'GRATUIT'},
+  {id:'r_rect',cat:'Redevances DAJC',label:'Demande de rectification',montant:10000,desc:'Redevance DAJC'},
+  {id:'r_conf',cat:'Redevances DTC',label:'Certificat de conformité',montant:100000,desc:'Redevance DTC'},
+  {id:'divers',cat:'Divers',label:'Prestation diverse / autre',montant:0,desc:'Montant libre'},
+];
+
+/* ================================================================
+   HELPERS
+================================================================ */
+const SL={approuve:'Approuvé',attente:'En attente',encours:'En cours','non-approuve':'Non approuvé',retrait:'Retiré'};
+const DTL={en_cours:'En cours',complet:'Complet',depose:'Déposé',valide:'Validé'};
+const TYL={LA:"Lettre d'Attribution",AV:'Attestation Villageoise',TF:'Titre Foncier/ACP',GS:'Grande Superficie'};
+const PIDL={CNI:'CNI',CMU:'CMU',Passeport:'Passeport',Attestation:'Attestation',Permis:'Permis conduire'};
+
+function g(id){return document.getElementById(id);}
+function gv(id){return (g(id)||{}).value?.trim()||'';}
+function sv(id,v){const e=g(id);if(e)e.value=v;}
+
+function bdgACD(s){const m={approuve:'ba',attente:'bw',encours:'be','non-approuve':'bn',retrait:'bt'};return `<span class="badge ${m[s]||'bw'}">${SL[s]||s}</span>`;}
+function bdgDT(s){const m={en_cours:'bv',complet:'ba',depose:'bc',valide:'ba'};return `<span class="badge ${m[s]||'bv'}">${DTL[s]||s}</span>`;}
+function bdgCK(s){return `<span class="er-badge ${s}">${{paye:'Payé',partiel:'Partiel',impaye:'Impayé'}[s]||s}</span>`;}
+function fmt(n){return (n||0).toLocaleString('fr-FR');}
+function fAmt(n){return n===0?'<span style="color:var(--cg);font-weight:700">GRATUIT</span>':n?'<span class="ramt">'+fmt(n)+' F</span>':'<span style="color:var(--tx3)">—</span>';}
+function fAmtS(n){return n===0?'<span style="color:var(--cg);font-weight:700">GRATUIT</span>':n?'<span class="ramt-s">'+fmt(n)+' F</span>':'<span style="color:var(--tx3)">—</span>';}
+let _tt;
+function toast(msg,type=''){const t=g('toast');t.textContent=msg;t.className='show'+(type?' '+type:'');clearTimeout(_tt);_tt=setTimeout(()=>t.className='',3200);}
+function addTL(msg){TL.push({msg,time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),user:CFG.username});ps('tl');}
+function b64File(file,cb){const r=new FileReader();r.onload=e=>cb(e.target.result,file.name,file.size,file.type);r.readAsDataURL(file);}
+
+/* ================================================================
+   NAV
+================================================================ */
+const PT={dashboard:'Tableau de bord','dt-liste':'Dossiers Techniques','dt-new':'Nouveau Dossier','acd-liste':'Registre ACD','acd-new':'Nouvel ACD',caisse:'Caisse — Encaissements','caisse-new':'Nouvel Encaissement',workflow:'Suivi Workflow',rapports:'Rapports & Stats',nomenclature:'Nomenclature des pièces',redevances:'Barème Redevances',lotissements:'Lotissements',config:'Configuration'};
+
+function go(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nitem').forEach(n=>n.classList.remove('active'));
+  const pg=g('page-'+id);if(pg)pg.classList.add('active');
+  if(el)el.classList.add('active');
+  g('tb-ti').textContent=PT[id]||id;
+  g('tb-bc').textContent=CFG.appName+' / '+(PT[id]||id);
+  if(id==='dashboard')updDash();
+  if(id==='dt-liste')renderDT();
+  if(id==='dt-new'){if(_eDT===-1){resetDTForm();sv('dt-ref',autoRef('dt'));}fillLS('dt-lot');buildPieces();updFrais();}
+  if(id==='acd-liste'){fillACDFilters();renderACD();}
+  if(id==='acd-new'){if(_eACD===-1)resetACDForm();fillLS('fa-lotissement');fillDTSel();buildCessBlocks();renderDTSel();}
+  if(id==='caisse'){renderCaisse();}
+  if(id==='caisse-new'){if(_eCK===-1){resetCKForm();sv('ck-ref',autoRef('rec'));}fillCKSel();renderPrestations();}
+  if(id==='workflow')renderWF();
+  if(id==='rapports')renderRapports();
+  if(id==='redevances')renderRed();
+  if(id==='lotissements')renderLots();
+  if(id==='config')loadConfig();
+  updBadges();
+}
+
+function updBadges(){
+  g('nb-dt').textContent=DT.length;
+  g('nb-acd').textContent=ACD.length;
+  g('nb-wf').textContent=DT.filter(d=>d.statut==='en_cours').length+ACD.filter(a=>a.statut!=='approuve'&&a.statut!=='retrait').length;
+  g('nb-caisse').textContent=CAISSE.length;
+}
+
+/* ================================================================
+   LOTS
+================================================================ */
+function fillLS(id){
+  const s=g(id);if(!s)return;
+  const v=s.value;
+  s.innerHTML='<option value="">— Sélectionner —</option>';
+  LOTS.forEach(l=>s.insertAdjacentHTML('beforeend',`<option value="${l}">${l}</option>`));
+  if(v)s.value=v;
+}
+
+/* ================================================================
+   DOUBLON
+================================================================ */
+function checkDbl(ctx){
+  const ilot=gv(ctx==='dt'?'dt-ilot':'fa-ilot');
+  const lot=gv(ctx==='dt'?'dt-lot-n':'fa-lot');
+  const lot2=gv(ctx==='dt'?'dt-lot':'fa-lotissement');
+  const alertEl=g(ctx+'-dbl');
+  if(!alertEl||!ilot||!lot||!lot2){if(alertEl)alertEl.classList.remove('show');return;}
+  const editIdx=ctx==='dt'?_eDT:_eACD;
+  const dtDup=DT.find((d,i)=>i!==editIdx&&d.ilot===ilot&&d.lot_n===lot&&d.lotissement===lot2);
+  const acdDup=ACD.find((a,i)=>i!==editIdx&&a.ilot===ilot&&a.lot===lot&&a.lotissement===lot2);
+  if(dtDup||acdDup){
+    const who=dtDup?`DT ${dtDup.ref} — ${dtDup.nom}`:`ACD ${acdDup.atv||'—'} — ${acdDup.nom}`;
+    alertEl.textContent=`⚠ Ce lot existe déjà dans ce lotissement : ${who}`;
+    alertEl.classList.add('show');
+    const inp=g(ctx==='dt'?'dt-lot-n':'fa-lot');if(inp)inp.classList.add('warn');
+  } else {
+    alertEl.classList.remove('show');
+    const inp=g(ctx==='dt'?'dt-lot-n':'fa-lot');if(inp)inp.classList.remove('warn');
+  }
+}
+
+/* ================================================================
+   PIECES
+================================================================ */
+function buildPieces(){
+  const type=gv('dt-type')||'LA';
+  const pieces=PIECES[type]||[];
+  const c=g('pieces-container');if(!c)return;
+  c.innerHTML=pieces.map(p=>`
+    <div class="piece-section">
+      <div class="piece-header" onclick="toggleP('pb-${p.id}',this)">
+        <h4>${p.label}</h4>
+        <span class="ph-req ${p.req?'obl':'fac'}">${p.req?'Obligatoire':'Facultatif'}</span>
+        <span class="ph-status ${_dtFiles[p.id]?'done':'pend'}" id="phs-${p.id}">${_dtFiles[p.id]?'✓ Fourni':'En attente'}</span>
+      </div>
+      <div class="piece-body" id="pb-${p.id}">
+        <div class="piece-desc">${p.desc}</div>
+        ${_dtFiles[p.id]?fItem(p.id,_dtFiles[p.id]):uZone(p.id)}
+      </div>
+    </div>`).join('');
+  updProg(type);
+}
+
+function uZone(pid){
+  return `<div class="upload-zone" ondragover="this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="hDrop(event,'${pid}')">
+    <input type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" onchange="hFile(this,'${pid}')">
+    <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    <p>Cliquer ou glisser ici</p><span>PDF, JPG, PNG, Word</span>
+  </div>`;
+}
+
+function fItem(pid,f){
+  return `<div class="file-list" id="fl-${pid}"><div class="file-item">
+    <div class="fi-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+    <div class="fi-name">${f.name}</div>
+    <div class="fi-size">${((f.size||0)/1024).toFixed(1)} Ko</div>
+    <button class="fi-view" onclick="viewFD(null,'${pid}')">Voir</button>
+    <button class="fi-del" onclick="rmFile('${pid}')">✕</button>
+  </div></div>`;
+}
+
+function hFile(inp,pid){
+  const file=inp.files[0];if(!file)return;
+  if(file.size>10*1024*1024){toast('Max 10 Mo','err');return;}
+  b64File(file,(data,name,size,type)=>{
+    _dtFiles[pid]={name,size,type,data};
+    const type2=gv('dt-type')||'LA';
+    const p=(PIECES[type2]||[]).find(x=>x.id===pid);
+    const pb=g('pb-'+pid);if(pb)pb.innerHTML=`<div class="piece-desc">${p?.desc||''}</div>${fItem(pid,{name,size})}`;
+    const phs=g('phs-'+pid);if(phs){phs.textContent='✓ Fourni';phs.className='ph-status done';}
+    updProg(type2);toast(`"${name}" ajouté ✓`);
+  });
+}
+function hDrop(e,pid){e.preventDefault();e.currentTarget.classList.remove('drag');const file=e.dataTransfer.files[0];if(!file)return;const inp=document.createElement('input');inp.type='file';const dt=new DataTransfer();dt.items.add(file);inp.files=dt.files;hFile(inp,pid);}
+function rmFile(pid){
+  delete _dtFiles[pid];const type=gv('dt-type')||'LA';
+  const p=(PIECES[type]||[]).find(x=>x.id===pid);
+  const pb=g('pb-'+pid);if(pb)pb.innerHTML=`<div class="piece-desc">${p?.desc||''}</div>${uZone(pid)}`;
+  const phs=g('phs-'+pid);if(phs){phs.textContent='En attente';phs.className='ph-status pend';}
+  updProg(type);
+}
+function updProg(type){
+  const pieces=PIECES[type]||[];
+  const done=pieces.filter(p=>_dtFiles[p.id]).length;
+  const pct=Math.round(done/pieces.length*100);
+  const bar=g('dt-prog-bar');if(bar)bar.style.width=pct+'%';
+  const lbl=g('dt-prog-lbl');
+  if(lbl)lbl.textContent=`${done}/${pieces.length} pièces (${pieces.filter(p=>p.req&&_dtFiles[p.id]).length}/${pieces.filter(p=>p.req).length} oblig.)`;
+}
+function updFrais(){
+  const req=gv('dt-req')||'physique';const type=gv('dt-type')||'LA';
+  const MAP={physique:{LA:91000,AV:91000,TF:81000,GS:116000},morale:{LA:251000,AV:251000,TF:241000,GS:276000},ong:{LA:101000,AV:101000,TF:91000,GS:126000}};
+  const amt=(MAP[req]||MAP.physique)[type]||0;
+  const el=g('dt-frais-info');if(el)el.textContent=`Frais estimés : ${fmt(amt)} F CFA`;
+}
+function toggleP(id,hdr){
+  const pb=g(id);if(!pb)return;pb.classList.toggle('open');
+  hdr.style.borderRadius=pb.classList.contains('open')?'var(--rlg) var(--rlg) 0 0':'var(--rlg)';
+}
+function viewFD(fkey,pid){
+  const f=fkey?(_FS[fkey]||{})[pid]:_dtFiles[pid];if(!f)return;
+  viewFData(f.data,f.name);
+}
+function viewFData(data,name){
+  const ext=(name||'').split('.').pop().toLowerCase();
+  const fvc=g('fv-content');
+  if(['jpg','jpeg','png','gif','webp'].includes(ext))fvc.innerHTML=`<img src="${data}" alt="${name}">`;
+  else if(ext==='pdf')fvc.innerHTML=`<iframe src="${data}"></iframe>`;
+  else fvc.innerHTML=`<div style="background:#fff;padding:30px;border-radius:10px;color:#333;text-align:center"><div style="font-size:40px;margin-bottom:12px">📄</div><p><strong>${name}</strong></p><a href="${data}" download="${name}" style="color:#0A5C35;font-weight:600;display:inline-block;margin-top:12px">⬇ Télécharger</a></div>`;
+  g('fv-name').textContent=name;
+  g('file-viewer').classList.add('open');
+}
+function closeViewer(){g('file-viewer').classList.remove('open');}
+
+/* ================================================================
+   DT SAVE / EDIT
+================================================================ */
+function saveDT(statut){
+  const ref=gv('dt-ref'),nom=gv('dt-nom'),type=gv('dt-type');
+  if(!ref||!nom){toast('Référence et nom obligatoires','err');return;}
+  if(_eDT===-1&&DT.find(d=>d.ref===ref)){toast('Référence déjà utilisée','err');return;}
+  if(statut==='complet'){
+    const obl=(PIECES[type]||[]).filter(p=>p.req&&!_dtFiles[p.id]);
+    if(obl.length&&!confirm(`${obl.length} pièce(s) obligatoire(s) manquante(s). Continuer ?`))return;
+  }
+  const fkey=_eDT>=0?DT[_eDT].fkey:'fk_'+ref;
+  _FS[fkey]={..._dtFiles};ps('files');
+  const entry={ref,nom,type,statut,fkey,date:gv('dt-date'),req:gv('dt-req'),tel:gv('dt-tel'),idType:gv('dt-id-type'),idNum:gv('dt-id-num'),lotissement:gv('dt-lot'),commune:gv('dt-commune'),quartier:gv('dt-quartier'),ilot:gv('dt-ilot'),lot_n:gv('dt-lot-n'),sup:gv('dt-sup'),obs:gv('dt-obs'),createdAt:_eDT>=0?DT[_eDT].createdAt:new Date().toISOString()};
+  if(_eDT>=0){DT[_eDT]=entry;addTL(`DT ${ref} modifié`);}else{DT.push(entry);addTL(`DT ${ref} enregistré — ${nom}`);CFG.cntDt++;localStorage.setItem('g5_cfg',JSON.stringify(CFG));}
+  ps('dt');toast(_eDT>=0?'DT modifié ✓':'DT enregistré ✓');_eDT=-1;_dtFiles={};
+  const ss=g('dt-save-status');if(ss)ss.innerHTML=`Statut : <span style="color:var(--cg)">${DTL[statut]}</span>`;
+  g('dt-edit-banner').style.display='none';g('dt-new-banner').style.display='block';
+  if(statut==='complet')setTimeout(()=>go('acd-new',document.querySelector('[data-page=acd-new]')),700);
+  else go('dt-liste',document.querySelector('[data-page=dt-liste]'));
+  updDash();updBadges();
+}
+function editDT(idx){
+  _eDT=idx;const d=DT[idx];_dtFiles={...(_FS[d.fkey]||{})};
+  const flds={'dt-ref':d.ref,'dt-date':d.date||'','dt-type':d.type,'dt-nom':d.nom,'dt-tel':d.tel||'','dt-req':d.req||'physique','dt-id-type':d.idType||'CNI','dt-id-num':d.idNum||'','dt-commune':d.commune||'','dt-quartier':d.quartier||'','dt-ilot':d.ilot||'','dt-lot-n':d.lot_n||'','dt-sup':d.sup||'','dt-obs':d.obs||''};
+  Object.entries(flds).forEach(([id,v])=>sv(id,v));
+  g('dt-edit-banner').style.display='block';g('dt-edit-ref-lbl').textContent=d.ref;
+  g('dt-new-banner').style.display='none';
+  go('dt-new',document.querySelector('[data-page=dt-new]'));
+  setTimeout(()=>{fillLS('dt-lot');sv('dt-lot',d.lotissement||'');buildPieces();updFrais();},60);
+}
+function cancelDTedit(){_eDT=-1;_dtFiles={};g('dt-edit-banner').style.display='none';g('dt-new-banner').style.display='block';resetDTForm();go('dt-liste',document.querySelector('[data-page=dt-liste]'));}
+function resetDTForm(){['dt-ref','dt-date','dt-nom','dt-tel','dt-id-num','dt-commune','dt-quartier','dt-ilot','dt-lot-n','dt-sup','dt-obs'].forEach(id=>{const e=g(id);if(e)e.value='';});_dtFiles={};const ss=g('dt-save-status');if(ss)ss.innerHTML='Statut : <span style="color:var(--co)">Non enregistré</span>';}
+function delDT(idx){
+  if(!confirm(`Supprimer "${DT[idx].ref}" ?`))return;
+  delete _FS[DT[idx].fkey];ps('files');addTL(`DT ${DT[idx].ref} supprimé`);DT.splice(idx,1);ps('dt');renderDT();updDash();updBadges();toast('DT supprimé');
+}
+
+/* ================================================================
+   DT STATUT
+================================================================ */
+function openStDT(idx){_dtStIdx=idx;_dtStVal=null;g('mdt-st-id').textContent=DT[idx].ref+' — '+DT[idx].nom;g('mdt-st-cmt').value='';document.querySelectorAll('#m-st-dt .sopt').forEach(o=>o.classList.remove('selected'));openM('m-st-dt');}
+function selStDT(v,el){document.querySelectorAll('#m-st-dt .sopt').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');_dtStVal=v;}
+function applyStDT(){
+  if(_dtStIdx===null||!_dtStVal){toast('Sélectionner un statut','err');return;}
+  const old=DT[_dtStIdx].statut;DT[_dtStIdx].statut=_dtStVal;
+  addTL(`Statut DT ${DT[_dtStIdx].ref} : ${DTL[old]} → ${DTL[_dtStVal]}`+(g('mdt-st-cmt').value?' — '+g('mdt-st-cmt').value:''));
+  ps('dt');closeM('m-st-dt');toast('Statut DT mis à jour ✓');renderDT();renderWF();updDash();
+}
+
+/* ================================================================
+   DT RENDER
+================================================================ */
+let _dtF='';
+function setDTF(f,el){_dtF=f;document.querySelectorAll('#chips-dt .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderDT();}
+function renderDT(){
+  const q=g('q-dt')?.value?.toLowerCase()||'',tf=gv('f-type-dt');
+  const data=DT.filter(d=>{
+    const mq=!q||d.ref.toLowerCase().includes(q)||d.nom.toLowerCase().includes(q)||(d.lotissement||'').toLowerCase().includes(q);
+    return mq&&(!_dtF||d.statut===_dtF)&&(!tf||d.type===tf);
+  });
+  g('dt-cnt').textContent=data.length+' dossier(s)';
+  const tb=g('dt-tbody');
+  if(!data.length){tb.innerHTML='<tr><td colspan="9"><div class="empty"><p>Aucun dossier technique</p></div></td></tr>';return;}
+  tb.innerHTML=data.map(d=>{
+    const pieces=PIECES[d.type]||[],files=_FS[d.fkey]||{};
+    const done=pieces.filter(p=>files[p.id]).length,pct=Math.round(done/pieces.length*100);
+    const lACD=ACD.filter(a=>a.dt_ref===d.ref).length,idx=DT.indexOf(d);
+    return `<tr>
+      <td><span class="tnum">${d.ref}</span><div class="tsub">${new Date(d.createdAt).toLocaleDateString('fr-FR')}</div></td>
+      <td><strong>${d.nom}</strong>${d.tel?'<div class="tsub">'+d.tel+'</div>':''}</td>
+      <td>${d.idType?`<span class="tag tgl">${d.idType}</span> ${d.idNum||''}`:''}</td>
+      <td><span class="tag tgl">${TYL[d.type]||d.type}</span></td>
+      <td>${d.lotissement||d.commune||'—'}${d.ilot?'<div class="tsub">Ilôt '+d.ilot+(d.lot_n?' / Lot '+d.lot_n:'')+'</div>':''}</td>
+      <td><div style="font-size:10px;margin-bottom:2px">${done}/${pieces.length} (${pct}%)</div><div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div></td>
+      <td>${bdgDT(d.statut)}</td>
+      <td>${lACD?`<span class="tnum">${lACD}</span>`:'—'}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sm" onclick="editDT(${idx})">Modifier</button>
+        <button class="btn btn-sm" onclick="openStDT(${idx})">Statut</button>
+        <button class="btn btn-sm btn-danger" onclick="delDT(${idx})">✕</button>
+      </td></tr>`;
+  }).join('');
+}
+
+/* ================================================================
+   ACD CESSIONNAIRES
+================================================================ */
+function buildCessBlocks(){
+  _numCess=1;
+  const cb=g('cess-blocks');if(!cb)return;
+  cb.innerHTML='';
+  addCessBlock(true);
+  const btn=g('btn-add-cess');if(btn)btn.style.display='inline-flex';
+}
+function addCessBlock(first=false){
+  if(_numCess>3){toast('Maximum 3 cessionnaires','warn');return;}
+  const n=_numCess;
+  const cb=g('cess-blocks');if(!cb)return;
+  const div=document.createElement('div');
+  div.className='cess-block';div.id='cess-'+n;
+  div.innerHTML=`
+    <div class="cess-title">Cessionnaire ${n}${n===1?' (principal)':''}
+      ${n>1?`<button class="btn btn-danger btn-sm" style="float:right;margin-top:-2px" onclick="rmCess(${n})">Supprimer</button>`:''}
+    </div>
+    <div class="fg3">
+      <div class="fg"><label>Nom et Prénoms</label><input type="text" id="cess-nom-${n}" placeholder="NOM Prénom(s)"></div>
+      <div class="fg"><label>Type pièce</label>
+        <select id="cess-id-type-${n}"><option value="CNI">CNI</option><option value="CMU">CMU</option><option value="Passeport">Passeport</option><option value="Attestation">Attestation</option><option value="Permis">Permis</option></select>
+      </div>
+      <div class="fg"><label>N° pièce d'identité</label><input type="text" id="cess-id-num-${n}" placeholder="ex : CI0123456789"></div>
+      <div class="fg"><label>Contact</label><input type="text" id="cess-tel-${n}" placeholder="07 00 00 00 00"></div>
+    </div>`;
+  cb.appendChild(div);
+  _numCess++;
+  const btn=g('btn-add-cess');if(btn)btn.style.display=_numCess>3?'none':'inline-flex';
+}
+function rmCess(n){const el=g('cess-'+n);if(el)el.remove();_numCess--;}
+function getCessionnaires(){
+  const list=[];
+  for(let i=1;i<=3;i++){
+    const nom=gv(`cess-nom-${i}`);
+    if(nom)list.push({nom,idType:gv(`cess-id-type-${i}`),idNum:gv(`cess-id-num-${i}`),tel:gv(`cess-tel-${i}`)});
+  }
+  return list;
+}
+function setCessionnaires(list){
+  buildCessBlocks();
+  if(!list||!list.length)return;
+  list.forEach((c,i)=>{
+    if(i>0)addCessBlock();
+    sv(`cess-nom-${i+1}`,c.nom||'');sv(`cess-id-type-${i+1}`,c.idType||'CNI');
+    sv(`cess-id-num-${i+1}`,c.idNum||'');sv(`cess-tel-${i+1}`,c.tel||'');
+  });
+}
+
+/* ================================================================
+   ACD DOC
+================================================================ */
+function handleACDDoc(inp){
+  const file=inp.files[0];if(!file)return;
+  if(file.size>10*1024*1024){toast('Max 10 Mo','err');return;}
+  b64File(file,(data,name,size)=>{
+    _acdDocData={data,name,size};
+    const prev=g('acd-doc-preview');
+    if(prev)prev.innerHTML=`<div class="file-item"><div class="fi-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="fi-name">${name}</div><button class="fi-view" onclick="viewFData(_acdDocData.data,_acdDocData.name)">Voir</button><button class="fi-del" onclick="_acdDocData=null;g('acd-doc-preview').innerHTML=''">✕</button></div>`;
+    toast(`Document ACD "${name}" chargé ✓`);
+  });
+}
+
+/* ================================================================
+   ACD SAVE / EDIT
+================================================================ */
+function fillDTSel(){
+  const s=g('fa-dt-lien');if(!s)return;
+  const v=s.value;
+  s.innerHTML='<option value="">— Aucun —</option>';
+  DT.filter(d=>d.statut==='complet'||d.statut==='depose'||d.statut==='valide').forEach(d=>s.insertAdjacentHTML('beforeend',`<option value="${d.ref}">${d.ref} — ${d.nom}</option>`));
+  if(v)s.value=v;
+}
+function renderDTSel(){
+  const div=g('acd-dt-selector');if(!div)return;
+  const avail=DT.filter(d=>d.statut==='complet'||d.statut==='depose');
+  if(!avail.length){div.innerHTML='';return;}
+  div.innerHTML=`<div class="info-box-g" style="cursor:pointer;margin-bottom:8px" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><strong>${avail.length} DT disponible(s)</strong> — Cliquer pour pré-remplir le formulaire ACD</div>
+  <div style="display:none;margin-bottom:14px">${avail.map(d=>`<div class="wfc" style="margin-bottom:6px" onclick="prefillACD('${d.ref}')">
+    <div><div class="wfnum">${d.ref} — ${d.nom}</div><div class="wfsub">${TYL[d.type]||d.type} · ${d.lotissement||d.commune||'—'}${d.ilot?' · Ilôt '+d.ilot:''}${d.lot_n?' / Lot '+d.lot_n:''}</div></div>
+    <div class="wfact">${bdgDT(d.statut)}<button class="btn btn-sm btn-p">Utiliser →</button></div>
+  </div>`).join('')}</div>`;
+}
+function prefillACD(ref){
+  const d=DT.find(x=>x.ref===ref);if(!d)return;
+  // Identification
+  sv('fa-dt-lien',ref);sv('fa-nom',d.nom||'');sv('fa-tel',d.tel||'');
+  sv('fa-id-type',d.idType||'CNI');sv('fa-id-num',d.idNum||'');
+  sv('fa-req-type',d.req||'physique');
+  // Foncier
+  sv('fa-ilot',d.ilot||'');sv('fa-lot',d.lot_n||'');
+  sv('fa-commune',d.commune||'');sv('fa-quartier',d.quartier||'');
+  sv('fa-sup',d.sup||'');
+  fillLS('fa-lotissement');sv('fa-lotissement',d.lotissement||'');
+  fillDTSel();sv('fa-dt-lien',ref);
+  // Cessionnaire 1 = titulaire DT si pas encore renseigné
+  if(!gv('cess-nom-1'))sv('cess-nom-1',d.nom||'');
+  toast('Formulaire ACD pré-rempli depuis DT '+ref+' ✓');
+}
+function saveACD(){
+  const nom=gv('fa-nom');if(!nom){toast('Nom obligatoire','err');return;}
+  const cess=getCessionnaires();
+  // retrait
+  const statut=gv('fa-statut');
+  const retraitDate=gv('fa-retrait-date'),retraitHeure=gv('fa-retrait-heure'),retraitPar=gv('fa-retrait-par');
+  const entry={
+    nom,dt_ref:gv('fa-dt-lien'),date:gv('fa-date'),atv:gv('fa-atv'),acd:gv('fa-acd-n'),
+    idType:gv('fa-id-type'),idNum:gv('fa-id-num'),tel:gv('fa-tel'),reqType:gv('fa-req-type'),
+    cessionnaires:cess,
+    ilot:gv('fa-ilot'),lot:gv('fa-lot'),lotissement:gv('fa-lotissement'),
+    commune:gv('fa-commune'),quartier:gv('fa-quartier'),sup:gv('fa-sup'),
+    type:gv('fa-type'),lf:gv('fa-lf'),cad:gv('fa-cad'),obs:gv('fa-obs'),
+    statut,
+    retraitDate:statut==='retrait'?retraitDate:'',
+    retraitHeure:statut==='retrait'?retraitHeure:'',
+    retraitPar:statut==='retrait'?retraitPar:'',
+    acdDoc:_acdDocData||null,
+    createdAt:_eACD>=0?ACD[_eACD].createdAt:new Date().toISOString()
+  };
+  if(_eACD>=0){ACD[_eACD]=entry;addTL(`ACD modifié — ${nom}`);}
+  else{
+    ACD.push(entry);
+    const dtRef=entry.dt_ref;if(dtRef){const dt=DT.find(d=>d.ref===dtRef);if(dt&&dt.statut==='complet')dt.statut='depose';ps('dt');}
+    addTL(`ACD enregistré — ${nom}${entry.atv?' (ATV '+entry.atv+')':''}`);
+  }
+  ps('acd');toast(_eACD>=0?'ACD modifié ✓':'ACD enregistré ✓');_eACD=-1;_acdDocData=null;
+  g('acd-edit-banner').style.display='none';g('acd-new-banner').style.display='block';
+  sv('acd-save-btn','Enregistrer l\'ACD');
+  go('acd-liste',document.querySelector('[data-page=acd-liste]'));
+  updDash();updBadges();
+}
+function editACD(idx){
+  _eACD=idx;const a=ACD[idx];
+  _acdDocData=a.acdDoc||null;
+  const flds={'fa-dt-lien':a.dt_ref||'','fa-date':a.date||'','fa-atv':a.atv||'','fa-acd-n':a.acd||'','fa-nom':a.nom,'fa-tel':a.tel||'','fa-id-type':a.idType||'CNI','fa-id-num':a.idNum||'','fa-req-type':a.reqType||'physique','fa-statut':a.statut,'fa-ilot':a.ilot||'','fa-lot':a.lot||'','fa-commune':a.commune||'','fa-quartier':a.quartier||'','fa-sup':a.sup||'','fa-type':a.type||'Résidentiel','fa-lf':a.lf||'','fa-cad':a.cad||'','fa-obs':a.obs||'','fa-retrait-date':a.retraitDate||'','fa-retrait-heure':a.retraitHeure||'','fa-retrait-par':a.retraitPar||''};
+  Object.entries(flds).forEach(([id,v])=>sv(id,v));
+  g('acd-edit-banner').style.display='block';g('acd-edit-ref-lbl').textContent=a.atv||a.acd||a.nom;
+  g('acd-new-banner').style.display='none';sv('acd-save-btn','Enregistrer les modifications');
+  go('acd-new',document.querySelector('[data-page=acd-new]'));
+  setTimeout(()=>{
+    fillLS('fa-lotissement');sv('fa-lotissement',a.lotissement||'');
+    fillDTSel();sv('fa-dt-lien',a.dt_ref||'');
+    setCessionnaires(a.cessionnaires||[]);
+    toggleRetraitSection();
+    if(a.acdDoc){
+      const prev=g('acd-doc-preview');
+      if(prev)prev.innerHTML=`<div class="file-item"><div class="fi-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="fi-name">${a.acdDoc.name}</div><button class="fi-view" onclick="viewFData(_acdDocData.data,_acdDocData.name)">Voir</button></div>`;
+    }
+  },60);
+}
+function cancelACDedit(){_eACD=-1;_acdDocData=null;g('acd-edit-banner').style.display='none';g('acd-new-banner').style.display='block';sv('acd-save-btn','Enregistrer l\'ACD');resetACDForm();go('acd-liste',document.querySelector('[data-page=acd-liste]'));}
+function resetACDForm(){['fa-nom','fa-date','fa-atv','fa-acd-n','fa-id-num','fa-ilot','fa-lot','fa-commune','fa-quartier','fa-sup','fa-lf','fa-cad','fa-obs','fa-retrait-date','fa-retrait-heure','fa-retrait-par'].forEach(id=>{const e=g(id);if(e)e.value='';});_acdDocData=null;const prev=g('acd-doc-preview');if(prev)prev.innerHTML='';}
+function delACD(idx){if(!confirm(`Supprimer "${ACD[idx].nom}" ?`))return;addTL(`ACD supprimé — ${ACD[idx].nom}`);ACD.splice(idx,1);ps('acd');renderACD();updDash();updBadges();toast('ACD supprimé');}
+
+function toggleRetraitSection(){
+  const statut=gv('fa-statut');
+  const rs=g('retrait-section');if(rs)rs.style.display=statut==='retrait'?'block':'none';
+}
+g('fa-statut') && g('fa-statut').addEventListener('change',toggleRetraitSection);
+
+/* ================================================================
+   ACD STATUT
+================================================================ */
+function openStACD(idx){
+  _acdStIdx=idx;_acdStVal=null;
+  g('macd-st-id').textContent=ACD[idx].nom;g('macd-st-cmt').value='';
+  document.querySelectorAll('#m-st-acd .sopt').forEach(o=>o.classList.remove('selected'));
+  g('retrait-st-fields').style.display='none';openM('m-st-acd');
+}
+function selStACD(v,el){
+  document.querySelectorAll('#m-st-acd .sopt').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');_acdStVal=v;
+  g('retrait-st-fields').style.display=v==='retrait'?'block':'none';
+  if(v==='retrait'){
+    const now=new Date();
+    sv('macd-retrait-date',now.toISOString().split('T')[0]);
+    sv('macd-retrait-heure',now.toTimeString().slice(0,5));
+  }
+}
+function applyStACD(){
+  if(_acdStIdx===null||!_acdStVal){toast('Sélectionner un statut','err');return;}
+  const old=ACD[_acdStIdx].statut;ACD[_acdStIdx].statut=_acdStVal;
+  if(_acdStVal==='retrait'){
+    ACD[_acdStIdx].retraitDate=gv('macd-retrait-date');
+    ACD[_acdStIdx].retraitHeure=gv('macd-retrait-heure');
+    ACD[_acdStIdx].retraitPar=gv('macd-retrait-par');
+  }
+  addTL(`Statut ACD ${ACD[_acdStIdx].nom} : ${SL[old]} → ${SL[_acdStVal]}`+(g('macd-st-cmt').value?' — '+g('macd-st-cmt').value:''));
+  ps('acd');closeM('m-st-acd');toast('Statut ACD mis à jour ✓');renderACD();renderWF();updDash();
+}
+function quickApprove(i){ACD[i].statut='approuve';addTL(`ACD approuvé — ${ACD[i].nom}`);ps('acd');toast('Approuvé ✓');renderWF();updDash();}
+
+/* ================================================================
+   ACD FILTERS & RENDER
+================================================================ */
+function fillACDFilters(){
+  const ys=g('f-an-acd');if(!ys)return;
+  const yrs=[...new Set(ACD.map(a=>a.date).filter(Boolean))].sort().reverse();
+  ys.innerHTML='<option value="">Toutes années</option>';yrs.forEach(y=>ys.insertAdjacentHTML('beforeend',`<option>${y}</option>`));
+  const ls=g('f-lot-acd');if(!ls)return;
+  const lots=[...new Set(ACD.map(a=>a.lotissement).filter(Boolean))].sort();
+  ls.innerHTML='<option value="">Tous lotissements</option>';lots.forEach(l=>ls.insertAdjacentHTML('beforeend',`<option>${l}</option>`));
+}
+function renderACD(){
+  const q=g('q-acd')?.value?.toLowerCase()||'',st=gv('f-st-acd'),an=gv('f-an-acd'),lo=gv('f-lot-acd');
+  const data=ACD.filter(a=>{
+    const mq=!q||a.nom.toLowerCase().includes(q)||(a.atv||'').includes(q)||(a.acd||'').toLowerCase().includes(q)||(a.lotissement||'').toLowerCase().includes(q)||(a.commune||'').toLowerCase().includes(q);
+    return mq&&(!st||a.statut===st)&&(!an||String(a.date)===an)&&(!lo||a.lotissement===lo);
+  });
+  g('acd-cnt').textContent=data.length+' dossier(s)';
+  const tb=g('acd-tbody');
+  if(!data.length){tb.innerHTML='<tr><td colspan="12"><div class="empty"><p>Aucun résultat</p></div></td></tr>';return;}
+  tb.innerHTML=data.map(a=>{
+    const idx=ACD.indexOf(a);
+    const cessStr=(a.cessionnaires||[]).map(c=>c.nom).filter(Boolean).join(', ')||'—';
+    const retraitInfo=a.statut==='retrait'&&a.retraitDate?`<div class="tsub">Retiré le ${new Date(a.retraitDate).toLocaleDateString('fr-FR')}${a.retraitHeure?' à '+a.retraitHeure:''}${a.retraitPar?' par '+a.retraitPar:''}</div>`:'';
+    return `<tr>
+      <td>${a.date||'—'}</td>
+      <td><strong>${a.nom}</strong>${a.tel?'<div class="tsub">'+a.tel+'</div>':''}</td>
+      <td>${a.idType?`<span class="tag tgl">${a.idType}</span><div class="tsub">${a.idNum||''}</div>`:''}</td>
+      <td>${a.ilot||'—'}</td><td>${a.lot||'—'}</td>
+      <td><span class="tnum">${a.atv||'—'}</span></td>
+      <td style="font-size:11px;color:var(--cg)">${a.acd||'—'}</td>
+      <td style="font-size:11px;max-width:140px">${cessStr}</td>
+      <td>${a.lotissement?'<span class="tag tgl">'+a.lotissement+'</span>':'—'}</td>
+      <td>${a.dt_ref?`<span class="tnum" style="font-size:11px">${a.dt_ref}</span>`:'—'}</td>
+      <td>${bdgACD(a.statut)}${retraitInfo}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sm" onclick="editACD(${idx})">Modifier</button>
+        <button class="btn btn-sm" onclick="openStACD(${idx})">Statut</button>
+        ${a.acdDoc?`<button class="btn btn-sm btn-b" onclick="viewFData(ACD[${idx}].acdDoc.data,ACD[${idx}].acdDoc.name)">Doc</button>`:''}
+        <button class="btn btn-sm btn-danger" onclick="delACD(${idx})">✕</button>
+      </td></tr>`;
+  }).join('');
+}
+
+/* ================================================================
+   CAISSE
+================================================================ */
+function fillCKSel(){
+  const s=g('ck-dossier');if(!s)return;
+  const v=s.value;s.innerHTML='<option value="">— Aucun dossier lié —</option>';
+  DT.forEach(d=>s.insertAdjacentHTML('beforeend',`<option value="DT:${d.ref}">DT — ${d.ref} (${d.nom})</option>`));
+  ACD.forEach(a=>s.insertAdjacentHTML('beforeend',`<option value="ACD:${a.atv||a.nom}">ACD — ${a.atv||'—'} (${a.nom})</option>`));
+  if(v)s.value=v;
+}
+function renderPrestations(){
+  const q=g('q-prest')?.value?.toLowerCase()||'';
+  const div=g('prestations-list');if(!div)return;
+  const filtered=PRESTS.filter(p=>!q||p.label.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q));
+  const cats={};filtered.forEach(p=>{if(!cats[p.cat])cats[p.cat]=[];cats[p.cat].push(p);});
+  div.innerHTML=Object.entries(cats).map(([cat,prests])=>`
+    <div style="font-size:10px;font-weight:700;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;padding:8px 4px 4px">${cat}</div>
+    ${prests.map(p=>{const gi=PRESTS.indexOf(p);return `<div class="prest-card ${_selPrest===gi?'selected':''}" onclick="selPrest(${gi})">
+      <div class="prest-title">${p.label}</div>
+      <div class="prest-amt">${p.montant===0?'GRATUIT':fmt(p.montant)+' F CFA'}</div>
+      <div class="prest-desc">${p.desc}</div>
+    </div>`}).join('')}`).join('');
+}
+function selPrest(idx){
+  _selPrest=idx;const p=PRESTS[idx];
+  g('prest-sel-lbl').textContent=p.label;
+  sv('ck-du',p.montant||0);updCKCalc();renderPrestations();
+  toast(`"${p.label}" sélectionnée`);
+}
+function updCKCalc(){
+  const du=parseFloat(g('ck-du')?.value||0),paye=parseFloat(g('ck-paye')?.value||0);
+  const reste=Math.max(0,du-paye);
+  const el=g('ck-reste');if(el)el.value=fmt(reste)+' F CFA';
+}
+function saveCaisse(){
+  const ref=gv('ck-ref'),client=gv('ck-client'),du=parseFloat(g('ck-du')?.value||0),paye=parseFloat(g('ck-paye')?.value||0);
+  if(!ref||!client){toast('N° reçu et client obligatoires','err');return;}
+  const reste=Math.max(0,du-paye);
+  const statut=paye<=0?'impaye':reste<=0?'paye':'partiel';
+  const prest=_selPrest!=null?PRESTS[_selPrest]:{label:'Prestation diverse',cat:'Divers'};
+  const entry={ref,client,du,paye,reste,statut,
+    date:gv('ck-date'),heure:gv('ck-heure'),dossier:gv('ck-dossier'),
+    mode:gv('ck-mode'),ref_pmt:gv('ck-ref-pmt'),obs:gv('ck-obs'),
+    prestation:prest.label,cat:prest.cat,
+    createdAt:_eCK>=0?CAISSE[_eCK].createdAt:new Date().toISOString()};
+  if(_eCK>=0){CAISSE[_eCK]=entry;addTL(`Encaissement modifié — ${ref}`);}
+  else{CAISSE.push(entry);addTL(`Encaissement — ${ref} · ${fmt(paye)} F CFA`);CFG.cntRec++;localStorage.setItem('g5_cfg',JSON.stringify(CFG));}
+  ps('caisse');toast(_eCK>=0?'Modifié ✓':'Enregistré ✓');_eCK=-1;
+  go('caisse',document.querySelector('[data-page=caisse]'));updDash();updBadges();
+}
+function editCaisse(idx){
+  _eCK=idx;const c=CAISSE[idx];
+  const flds={'ck-ref':c.ref,'ck-date':c.date||'','ck-heure':c.heure||'','ck-client':c.client,'ck-du':c.du,'ck-paye':c.paye,'ck-ref-pmt':c.ref_pmt||'','ck-obs':c.obs||'','ck-mode':c.mode||'especes'};
+  Object.entries(flds).forEach(([id,v])=>sv(id,v));
+  g('ck-edit-banner').style.display='block';g('ck-edit-ref-lbl').textContent=c.ref;
+  go('caisse-new',document.querySelector('[data-page=caisse-new]'));
+  setTimeout(()=>{fillCKSel();sv('ck-dossier',c.dossier||'');updCKCalc();},60);
+}
+function cancelCKedit(){_eCK=-1;resetCKForm();g('ck-edit-banner').style.display='none';go('caisse',document.querySelector('[data-page=caisse]'));}
+function resetCKForm(){
+  ['ck-ref','ck-date','ck-heure','ck-client','ck-du','ck-paye','ck-reste','ck-ref-pmt','ck-obs'].forEach(id=>{const e=g(id);if(e)e.value='';});
+  _selPrest=null;g('prest-sel-lbl').textContent='Aucune sélectionnée';
+  g('ck-edit-banner').style.display='none';
+  const today=new Date().toISOString().split('T')[0];sv('ck-date',today);
+  sv('ck-heure',new Date().toTimeString().slice(0,5));
+}
+function delCaisse(idx){if(!confirm(`Supprimer le reçu "${CAISSE[idx].ref}" ?`))return;addTL(`Encaissement supprimé — ${CAISSE[idx].ref}`);CAISSE.splice(idx,1);ps('caisse');renderCaisse();updDash();updBadges();toast('Supprimé');}
+
+/* ================================================================
+   RECU (3 exemplaires)
+================================================================ */
+function showRecu(idx){
+  const c=CAISSE[idx];
+  const modes={especes:'Espèces',cheque:'Chèque',virement:'Virement',mobile:'Mobile Money'};
+  const logoHtml=CFG.logoData?`<img src="${CFG.logoData}" alt="logo">`:`<svg viewBox="0 0 24 24" width="28" height="28" fill="white"><path d="M3 21h18M5 21V7l7-4 7 4v14"/></svg>`;
+  const dateStr=c.date?new Date(c.date).toLocaleDateString('fr-FR'):new Date(c.createdAt).toLocaleDateString('fr-FR');
+  const exs=['CLIENT','ADMINISTRATION','COMPTABILITÉ'];
+
+  function sheet(ex){
+    return `<div class="recu-sheet" style="position:relative">
+      <div class="recu-exemplaire">Exemplaire — ${ex}</div>
+      <div class="recu-head">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div class="recu-org-logo">${logoHtml}</div>
+          <div><div class="recu-org-name">${CFG.orgName}</div><div class="recu-org-sub">${CFG.orgSub}</div></div>
+        </div>
+        <div>
+          <div class="recu-title">REÇU DE PAIEMENT</div>
+          <div class="recu-num">N° ${c.ref}</div>
+        </div>
+      </div>
+      <div class="recu-row"><span class="lbl">Date</span><span>${dateStr}${c.heure?' à '+c.heure:''}</span></div>
+      <div class="recu-row"><span class="lbl">Client / Bénéficiaire</span><span style="font-weight:700">${c.client}</span></div>
+      <div class="recu-row"><span class="lbl">Prestation</span><span>${c.prestation}</span></div>
+      <div class="recu-row"><span class="lbl">Dossier lié</span><span>${c.dossier||'—'}</span></div>
+      <div class="recu-row"><span class="lbl">Mode de paiement</span><span>${modes[c.mode]||c.mode}</span></div>
+      ${c.ref_pmt?`<div class="recu-row"><span class="lbl">Référence paiement</span><span>${c.ref_pmt}</span></div>`:''}
+      <div class="recu-row"><span class="lbl">Montant dû</span><span>${fmt(c.du)} F CFA</span></div>
+      <div class="recu-row"><span class="lbl">Montant payé</span><span style="color:var(--cg);font-weight:700">${fmt(c.paye)} F CFA</span></div>
+      ${c.reste>0?`<div class="recu-row"><span class="lbl">Reste à payer</span><span style="color:#B45309;font-weight:700">${fmt(c.reste)} F CFA</span></div>`:''}
+      ${c.obs?`<div class="recu-row"><span class="lbl">Observations</span><span>${c.obs}</span></div>`:''}
+      <div class="recu-total-box">
+        <span class="recu-total-lbl">TOTAL ENCAISSÉ</span>
+        <span class="recu-total-amt">${fmt(c.paye)} F CFA</span>
+      </div>
+      <div class="recu-sigs">
+        <div class="recu-sig-box">Signature du client<br><br><br></div>
+        <div class="recu-sig-box">Cachet & Signature agent<br><br><br></div>
+      </div>
+      <div style="font-size:9px;color:#999;margin-top:12px;text-align:center;border-top:1px dashed #eee;padding-top:6px">${CFG.recuFoot1}<br>${CFG.recuFoot2}</div>
+      <div class="recu-watermark">${c.statut==='paye'?'SOLDÉ':c.statut==='impaye'?'IMPAYÉ':''}</div>
+    </div>`;
+  }
+  g('m-recu-body').innerHTML=exs.map(e=>sheet(e)).join('');
+  openM('m-recu');
+}
+
+function renderCaisse(){
+  const q=g('q-caisse')?.value?.toLowerCase()||'',st=gv('f-ck-st'),ty=gv('f-ck-type');
+  const cats=[...new Set(CAISSE.map(c=>c.cat).filter(Boolean))];
+  const tysel=g('f-ck-type');
+  if(tysel){const v=tysel.value;tysel.innerHTML='<option value="">Toutes catégories</option>';cats.forEach(c=>tysel.insertAdjacentHTML('beforeend',`<option>${c}</option>`));tysel.value=v;}
+  const data=CAISSE.filter(c=>{
+    const mq=!q||c.ref.toLowerCase().includes(q)||c.client.toLowerCase().includes(q)||(c.prestation||'').toLowerCase().includes(q);
+    return mq&&(!st||c.statut===st)&&(!ty||c.cat===ty);
+  });
+  g('caisse-cnt').textContent=data.length+' opération(s)';
+  const total=CAISSE.reduce((s,c)=>s+(c.paye||0),0);
+  g('ck-total').textContent=fmt(total)+' F';
+  g('ck-payes').textContent=CAISSE.filter(c=>c.statut==='paye').length;
+  g('ck-part').textContent=CAISSE.filter(c=>c.statut==='partiel').length;
+  g('ck-imp').textContent=CAISSE.filter(c=>c.statut==='impaye').length;
+  const tb=g('caisse-tbody');
+  if(!data.length){tb.innerHTML='<tr><td colspan="11"><div class="empty"><p>Aucune opération</p></div></td></tr>';return;}
+  const modes={especes:'Espèces',cheque:'Chèque',virement:'Virement',mobile:'Mobile Money'};
+  tb.innerHTML=data.map(c=>{
+    const idx=CAISSE.indexOf(c);
+    return `<tr>
+      <td><span class="tnum">${c.ref}</span></td>
+      <td>${c.date?new Date(c.date).toLocaleDateString('fr-FR'):'—'}${c.heure?'<div class="tsub">'+c.heure+'</div>':''}</td>
+      <td><strong>${c.client}</strong></td>
+      <td style="max-width:150px;font-size:11px">${c.prestation||'—'}</td>
+      <td style="font-size:11px;color:var(--cg)">${c.dossier||'—'}</td>
+      <td style="font-weight:600">${fmt(c.du)} F</td>
+      <td style="color:var(--cg);font-weight:700">${fmt(c.paye)} F</td>
+      <td style="color:${c.reste>0?'#B45309':'var(--tx3)'}">${c.reste>0?fmt(c.reste)+' F':'—'}</td>
+      <td style="font-size:11px">${modes[c.mode]||c.mode}</td>
+      <td>${bdgCK(c.statut)}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sm btn-k" onclick="showRecu(${idx})">Reçu ×3</button>
+        <button class="btn btn-sm" onclick="editCaisse(${idx})">Modifier</button>
+        <button class="btn btn-sm btn-danger" onclick="delCaisse(${idx})">✕</button>
+      </td></tr>`;
+  }).join('');
+}
+
+/* ================================================================
+   WORKFLOW
+================================================================ */
+function renderWF(){
+  g('wf-dt').textContent=DT.filter(d=>d.statut==='en_cours').length;
+  g('wf-att').textContent=ACD.filter(a=>a.statut==='attente').length;
+  g('wf-enc').textContent=ACD.filter(a=>a.statut==='encours').length;
+  g('wf-nap').textContent=ACD.filter(a=>a.statut==='non-approuve').length;
+  const dtPend=DT.filter(d=>d.statut!=='valide');
+  const dtb=g('wf-dt-body');
+  dtb.innerHTML=dtPend.length?dtPend.map(d=>`<div class="wfc">
+    <div><div class="wfnum">${d.ref} — ${d.nom}</div><div class="wfsub">${TYL[d.type]||d.type} · ${d.lotissement||d.commune||'—'}${d.ilot?' · Ilôt '+d.ilot:''}</div></div>
+    <div class="wfact">${bdgDT(d.statut)}
+      <button class="btn btn-sm btn-b" onclick="editDT(${DT.indexOf(d)})">Modifier</button>
+      <button class="btn btn-sm" onclick="openStDT(${DT.indexOf(d)})">Statut</button>
+    </div></div>`).join(''):'<div class="empty"><p>Aucun dossier en cours</p></div>';
+  const acdPend=ACD.filter(a=>a.statut!=='approuve'&&a.statut!=='retrait');
+  const ab=g('wf-acd-body');
+  ab.innerHTML=acdPend.length?acdPend.map(a=>`<div class="wfc">
+    <div><div class="wfnum">${a.nom}${a.atv?' — ATV '+a.atv:''}</div>
+    <div class="wfsub">${a.lotissement||a.commune||'—'}${a.lot?' · Lot '+a.lot:''}${a.date?' · '+a.date:''}</div></div>
+    <div class="wfact">${bdgACD(a.statut)}
+      <button class="btn btn-sm btn-b" onclick="editACD(${ACD.indexOf(a)})">Modifier</button>
+      <button class="btn btn-sm btn-o" onclick="quickApprove(${ACD.indexOf(a)})">Approuver</button>
+      <button class="btn btn-sm" onclick="openStACD(${ACD.indexOf(a)})">Statut</button>
+    </div></div>`).join(''):'<div class="empty"><p>Tous les ACD sont traités !</p></div>';
+}
+
+/* ================================================================
+   DASHBOARD
+================================================================ */
+function updDash(){
+  g('s-dt').textContent=DT.length;
+  g('s-dt-enc').textContent=DT.filter(d=>d.statut==='en_cours').length;
+  g('s-appr').textContent=ACD.filter(a=>a.statut==='approuve').length;
+  g('s-retrait').textContent=ACD.filter(a=>a.statut==='retrait').length;
+  const today=new Date().toISOString().split('T')[0];
+  const todayAmt=CAISSE.filter(c=>c.date===today).reduce((s,c)=>s+(c.paye||0),0);
+  g('s-caisse').textContent=fmt(todayAmt)+' F';
+  const dtl=DT.slice(-5).reverse();
+  const dtb=g('dash-dt-tb');
+  dtb.innerHTML=dtl.length?dtl.map(d=>{
+    const pieces=PIECES[d.type]||[],files=_FS[d.fkey]||{};
+    const pct=Math.round(pieces.filter(p=>files[p.id]).length/pieces.length*100);
+    return `<tr><td><span class="tnum">${d.ref}</span></td><td>${d.nom}</td><td><span class="tag tgl">${TYL[d.type]||d.type}</span></td>
+    <td><div style="font-size:10px;margin-bottom:2px">${pct}%</div><div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div></td>
+    <td>${bdgDT(d.statut)}</td></tr>`;}).join(''):'<tr><td colspan="5"><div class="empty"><p>Aucun DT</p></div></td></tr>';
+  const acdb=g('dash-acd-tb');
+  const acds=ACD.slice(-5).reverse();
+  acdb.innerHTML=acds.length?acds.map(a=>`<tr><td>${a.date||'—'}</td><td><span class="tnum">${a.atv||'—'}</span></td><td><strong>${a.nom}</strong></td><td>${a.ilot||'—'}</td><td>${a.lot||'—'}</td><td>${a.lotissement?'<span class="tag tgl">'+a.lotissement+'</span>':'—'}</td><td>${bdgACD(a.statut)}</td></tr>`).join(''):'<tr><td colspan="7"><div class="empty"><p>Aucun ACD</p></div></td></tr>';
+  renderTL();
+}
+function renderTL(){
+  const ul=g('tl-ul');const items=[...TL].reverse().slice(0,12);
+  if(!items.length){ul.innerHTML='<li class="tli"><div class="tldc"><div class="tldot"></div></div><div><div class="tlmsg">Application démarrée</div><div class="tlmt">Système</div></div></li>';return;}
+  ul.innerHTML=items.map((t,i)=>`<li class="tli"><div class="tldc"><div class="tldot"></div>${i<items.length-1?'<div class="tlln"></div>':''}</div><div><div class="tlmsg">${t.msg}</div><div class="tlmt">${t.time} — ${t.user}</div></div></li>`).join('');
+}
+
+/* ================================================================
+   RAPPORTS
+================================================================ */
+function renderRapports(){
+  const tot=ACD.length||1;
+  const SS=[{k:'approuve',l:'Approuvé',c:'#0A5C35'},{k:'encours',l:'En cours',c:'#1565C0'},{k:'attente',l:'En attente',c:'#E8820C'},{k:'non-approuve',l:'Non approuvé',c:'#991B1B'},{k:'retrait',l:'Retiré',c:'#0891B2'}];
+  g('rpt-st').innerHTML=SS.map(s=>{const v=ACD.filter(a=>a.statut===s.k).length;const p=Math.round(v/tot*100);return `<div class="rbi"><div class="rbh"><span>${s.l}</span><span>${v} (${p}%)</span></div><div class="rbt"><div class="rbf" style="width:${p}%;background:${s.c}"></div></div></div>`;}).join('');
+  const tm={};ACD.forEach(a=>{tm[a.type||'Non défini']=(tm[a.type||'Non défini']||0)+1;});
+  const tc=['#0A5C35','#E8820C','#1565C0','#7B1FA2'];
+  const te=Object.entries(tm);
+  g('rpt-ty').innerHTML=te.length?te.map(([k,v],i)=>{const p=Math.round(v/tot*100);return `<div class="rbi"><div class="rbh"><span>${k}</span><span>${v} (${p}%)</span></div><div class="rbt"><div class="rbf" style="width:${p}%;background:${tc[i%tc.length]}"></div></div></div>`;}).join(''):'<p style="font-size:12px;color:var(--tx3)">Aucune donnée</p>';
+  const cm={};CAISSE.forEach(c=>{cm[c.cat||'Divers']=(cm[c.cat||'Divers']||0)+(c.paye||0);});
+  const ce=Object.entries(cm).sort((a,b)=>b[1]-a[1]);
+  const totCK=ce.reduce((s,[,v])=>s+v,0)||1;
+  g('rpt-caisse').innerHTML=ce.length?ce.map(([k,v])=>{const p=Math.round(v/totCK*100);return `<div class="rbi"><div class="rbh"><span>${k}</span><span>${fmt(v)} F (${p}%)</span></div><div class="rbt"><div class="rbf" style="width:${p}%;background:#B45309"></div></div></div>`;}).join(''):'<p style="font-size:12px;color:var(--tx3)">Aucune recette</p>';
+  const sup=ACD.reduce((a,x)=>a+(parseFloat(x.sup)||0),0);
+  const totCKAll=CAISSE.reduce((s,c)=>s+(c.paye||0),0);
+  g('rpt-syn').innerHTML=`
+    <div class="sc g" style="margin:0"><div class="slbl">DT + ACD</div><div class="sval" style="color:var(--cg);font-size:20px">${DT.length}+${ACD.length}</div></div>
+    <div class="sc k" style="margin:0"><div class="slbl">Recettes totales</div><div class="sval" style="color:#B45309;font-size:18px">${fmt(totCKAll)}</div><div class="ssub">F CFA</div></div>
+    <div class="sc gr" style="margin:0"><div class="slbl">Superficie totale</div><div class="sval" style="color:var(--tx2);font-size:18px">${fmt(sup)}</div><div class="ssub">m²</div></div>`;
+  const lm={};ACD.forEach(a=>{if(a.lotissement)lm[a.lotissement]=(lm[a.lotissement]||0)+1;});
+  const le=Object.entries(lm).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  g('rpt-lot').innerHTML=le.length?`<div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:600;color:var(--tx2);margin-bottom:9px;text-transform:uppercase">Top lotissements</div>`+le.map(([k,v])=>{const p=Math.round(v/ACD.length*100);return `<div class="rbi"><div class="rbh"><span>${k}</span><span>${v} ACD (${p}%)</span></div><div class="rbt"><div class="rbf" style="width:${p}%;background:var(--cg)"></div></div></div>`;}).join(''):'';
+}
+
+/* ================================================================
+   REDEVANCES
+================================================================ */
+const RED=[
+  {n:1,srv:'DGUF',acte:'LOTISSEMENT INTÉRIEUR DU PAYS',sup:'0Ha à +',p:70000,s:null,o:null},
+  {n:2,srv:'DGUF',acte:'DÉCLASSEMENT',sup:'',p:100000,s:null,o:null},
+  {n:3,srv:'DGUF',acte:'MORCELLEMENT',sup:'',p:100000,s:null,o:null},
+  {n:4,srv:'DGUF',acte:'AGRÉMENT AMÉNAGEUR FONCIER',sup:'',p:100000,s:null,o:null},
+  {n:5,srv:'DGUF',acte:'AVIS DE SERVITUDE',sup:'',p:20000,s:null,o:null},
+  {n:6,srv:'DGUF',acte:'PLAN DE SITUATION',sup:'',p:5000,s:null,o:null},
+  {n:7,srv:'DGUF',acte:'DEMANDE DE PLAN',sup:'',p:10000,s:null,o:null},
+  {n:8,srv:'DGUF',acte:'AUTORISATION DE LOTIR',sup:'',p:500000,s:null,o:null},
+  {n:9,srv:'DGUF',acte:"CERTIFICAT D'URBANISME",sup:'',p:5000,s:null,o:null},
+  {n:10,srv:'DGUF',acte:'RESTITUTION QUARTIER PRÉCAIRE',sup:'0 à 50Ha',p:200000,s:null,o:null},
+  {n:11,srv:'DGUF',acte:'RESTITUTION QUARTIER PRÉCAIRE',sup:'50Ha et +',p:400000,s:null,o:null},
+  {n:12,srv:'DGUF',acte:'ACD — ATTESTATION',sup:'',p:70000,s:null,o:null},
+  {n:13,srv:'DGUF',acte:"ACD — LETTRE D'ATTRIBUTION",sup:'',p:60000,s:null,o:null},
+  {n:14,srv:'DGUF',acte:'ACD — ACP + LA + TF',sup:'',p:50000,s:null,o:null},
+  {n:15,srv:'DGUF',acte:'ACD — RÉGULARISATION',sup:'',p:70000,s:null,o:null},
+  {n:16,srv:'DDU',acte:'TRANSFERT',sup:'',p:60000,s:null,o:null},
+  {n:17,srv:'DDU',acte:'ACD HORS LOT. ATTESTATION',sup:'0 à 0,5Ha',p:115000,s:275000,o:125000},
+  {n:18,srv:'DDU',acte:'ACD HORS LOT. ATTESTATION',sup:'0,5 à 1Ha',p:140000,s:300000,o:150000},
+  {n:19,srv:'DDU',acte:'ACD HORS LOT. ATTESTATION',sup:'1 à 2Ha',p:190000,s:350000,o:200000},
+  {n:20,srv:'DDU',acte:'ACD HORS LOT. ATTESTATION',sup:'2 à 3Ha',p:240000,s:400000,o:250000},
+  {n:21,srv:'DDU',acte:'ACD HORS LOT. ATTESTATION',sup:'3Ha et +',p:290000,s:450000,o:300000},
+  {n:22,srv:'DDU',acte:"ACD HORS LOT. LETTRE D'ATTRIBUTION",sup:'0 à 0,5Ha',p:100000,s:250000,o:100000},
+  {n:23,srv:'DDU',acte:"ACD HORS LOT. LETTRE D'ATTRIBUTION",sup:'0,5 à 1Ha',p:110000,s:null,o:null},
+  {n:24,srv:'DDU',acte:'ACD HORS LOT. TF/ACP',sup:'0 à 0,5Ha',p:80000,s:240000,o:90000},
+  {n:25,srv:'DDU',acte:"VISITE TECHNIQUE D'IDENTIFICATION",sup:'',p:25000,s:25000,o:null},
+  {n:26,srv:'DDU',acte:"DUPLICATA D'ACD",sup:'',p:80000,s:240000,o:null},
+  {n:27,srv:'DDU',acte:'RADIATION DE CLAUSE',sup:'',p:20000,s:null,o:null},
+  {n:28,srv:'DDU',acte:'BAIL EMPHYTÉOTIQUE',sup:'',p:40000,s:null,o:null},
+  {n:29,srv:'DDU',acte:"ATTESTATION LETTRE D'ATTRIBUTION",sup:'',p:5000,s:null,o:null},
+  {n:30,srv:'DDU',acte:'ÉTAT DOMANIAL / POSITION FONCIER',sup:'',p:5000,s:null,o:null},
+  {n:31,srv:'DL',acte:'AGRÉMENT PROMOTEUR IMMOBILIER',sup:'',p:100000,s:null,o:null},
+  {n:32,srv:'DL',acte:'AGRÉMENT AGENT IMMOBILIER',sup:'',p:50000,s:null,o:null},
+  {n:33,srv:'DL',acte:'PERMIS DE CONSTRUIRE MUNICIPAL',sup:'',p:50000,s:null,o:null},
+  {n:34,srv:'DL',acte:'PERMIS DE CONSTRUIRE MINISTÉRIEL',sup:'',p:100000,s:null,o:null},
+  {n:35,srv:'DL',acte:'EXPERTISE IMMOBILIÈRE',sup:'',p:30000,s:null,o:null},
+  {n:36,srv:'DL',acte:'ATTESTATION DE NON LOGEMENT',sup:'',p:5000,s:null,o:null},
+  {n:37,srv:'DAJC',acte:"ANNULATION D'ACTES",sup:'1 à 15Ha',p:100000,s:null,o:null},
+  {n:38,srv:'DAJC',acte:"ANNULATION D'ACTES",sup:'15 à 50Ha',p:200000,s:null,o:null},
+  {n:39,srv:'DAJC',acte:"ANNULATION D'ACTES",sup:'50Ha et +',p:400000,s:null,o:null},
+  {n:40,srv:'DAJC',acte:'ARRÊT URGENT DE TRAVAUX',sup:'',p:10000,s:null,o:null},
+  {n:41,srv:'DAJC',acte:'DÉMOLITION',sup:'',p:10000,s:null,o:null},
+  {n:42,srv:'DAJC',acte:'DÉGUERPISSEMENT',sup:'',p:10000,s:null,o:null},
+  {n:43,srv:'DAJC',acte:'DEMANDE DE MAINLEVÉE',sup:'',p:0,s:0,o:0},
+  {n:44,srv:'DAJC',acte:'DEMANDE DE RECTIFICATION',sup:'',p:10000,s:null,o:null},
+  {n:45,srv:'DTC',acte:'CERTIFICAT DE CONFORMITÉ',sup:'',p:100000,s:null,o:null},
+];
+function renderRed(){
+  const q=g('q-red')?.value?.toLowerCase()||'',srv=gv('f-red-srv');
+  const data=RED.filter(r=>(!q||r.acte.toLowerCase().includes(q)||(r.sup||'').toLowerCase().includes(q))&&(!srv||r.srv===srv));
+  const SC={'DGUF':'#E6F2EC','DDU':'#EFF6FF','DL':'#FEF3E7','DAJC':'#FEE2E2','DTC':'#F3E8FF'};
+  const TC={'DGUF':'#0A5C35','DDU':'#1565C0','DL':'#B45309','DAJC':'#991B1B','DTC':'#6B21A8'};
+  const tb=g('red-tbody');
+  if(!data.length){tb.innerHTML='<tr><td colspan="7"><div class="empty"><p>Aucun acte trouvé</p></div></td></tr>';return;}
+  tb.innerHTML=data.map(r=>`<tr>
+    <td style="color:var(--tx3);font-size:10px">${r.n}</td>
+    <td><span style="background:${SC[r.srv]||'#eee'};color:${TC[r.srv]||'#333'};padding:2px 5px;border-radius:4px;font-size:9px;font-weight:700">${r.srv}</span></td>
+    <td style="font-weight:500">${r.acte}</td>
+    <td style="font-size:10px;color:var(--tx2)">${r.sup||'—'}</td>
+    <td>${fAmt(r.p)}</td><td>${fAmtS(r.s)}</td><td>${fAmtS(r.o)}</td></tr>`).join('');
+}
+
+/* ================================================================
+   LOTISSEMENTS
+================================================================ */
+function renderLots(){
+  const q=g('q-lot')?.value?.toLowerCase()||'';
+  const data=LOTS.filter(l=>!q||l.toLowerCase().includes(q));
+  g('lot-cnt').textContent=data.length+' lotissement(s)';
+  const tb=g('lot-tbody');
+  if(!data.length){tb.innerHTML='<tr><td colspan="4"><div class="empty"><p>Aucun lotissement</p></div></td></tr>';return;}
+  tb.innerHTML=data.map(l=>{
+    const idx=LOTS.indexOf(l);
+    return `<tr><td><strong>${l}</strong></td><td><span class="tnum">${DT.filter(d=>d.lotissement===l).length}</span></td><td><span class="tnum">${ACD.filter(a=>a.lotissement===l).length}</span></td>
+    <td><button class="btn btn-sm btn-danger" onclick="delLot(${idx})">Supprimer</button></td></tr>`;
+  }).join('');
+}
+function saveLot(){
+  const nom=g('ml-nom')?.value?.trim()?.toUpperCase();
+  if(!nom){toast('Nom requis','err');return;}
+  if(LOTS.includes(nom)){toast('Déjà existant','warn');return;}
+  LOTS.push(nom);ps('lots');fillLS('dt-lot');fillLS('fa-lotissement');closeM('m-lot');g('ml-nom').value='';renderLots();toast('"'+nom+'" ajouté ✓');
+}
+function delLot(i){if(!confirm(`Supprimer "${LOTS[i]}" ?`))return;LOTS.splice(i,1);ps('lots');renderLots();fillLS('dt-lot');fillLS('fa-lotissement');toast('Supprimé');}
+
+/* ================================================================
+   EXPORT CSV
+================================================================ */
+function exportCSV(){
+  if(!ACD.length){toast('Aucune donnée ACD','err');return;}
+  const H=['DATE','NOM ET PRÉNOMS','TYPE PIECE','N° PIECE','ILOT','LOT','N° ATV','N° ACD','CESSIONNAIRE 1','CESSIONNAIRE 2','CESSIONNAIRE 3','CONTACT','LOTISSEMENT','COMMUNE','QUARTIER','SUPERFICIE (m²)','TYPE','STATUT','DT LIÉ','DATE RETRAIT','RETIRÉ PAR'];
+  const rows=ACD.map(a=>{
+    const c=a.cessionnaires||[];
+    return [a.date||'',a.nom,a.idType||'',a.idNum||'',a.ilot||'',a.lot||'',a.atv||'',a.acd||'',(c[0]?.nom||''),(c[1]?.nom||''),(c[2]?.nom||''),a.tel||'',a.lotissement||'',a.commune||'',a.quartier||'',a.sup||'',a.type||'',SL[a.statut]||a.statut,a.dt_ref||'',a.retraitDate||'',a.retraitPar||''];
+  });
+  const csv='\uFEFF'+[H,...rows].map(r=>r.map(v=>`"${v}"`).join(';')).join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=CFG.appName+'_ACD_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  toast('Export CSV téléchargé ✓');
+}
+
+/* ================================================================
+   MODALS
+================================================================ */
+function openM(id){g(id).classList.add('open');}
+function closeM(id){g(id).classList.remove('open');}
+document.querySelectorAll('.mov').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)closeM(this.id);}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.mov.open').forEach(m=>m.classList.remove('open'));closeViewer();}});
+
+/* ================================================================
+   INIT
+================================================================ */
+applyConfig();loadConfig();
+fillLS('dt-lot');fillLS('fa-lotissement');
+updDash();updBadges();
+const todayStr=new Date().toISOString().split('T')[0];
+sv('ck-date',todayStr);sv('ck-heure',new Date().toTimeString().slice(0,5));
+sv('dt-date',todayStr);
+</script>
+</body>
+</html>
